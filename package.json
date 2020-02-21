@@ -4,7 +4,7 @@
   "description": "Generates through prompts the .env variables file based on a schema/defaults file",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "npm run build && node dist/index.js",
     "start:watch": "nodemon --exec babel-node src/index.js",
     "build": "babel src --out-dir dist",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -32,6 +32,7 @@
     "nodemon": "^2.0.2"
   },
   "dependencies": {
+    "@babel/polyfill": "^7.8.3",
     "app-root-path": "^3.0.0",
     "inquirer": "^7.0.4",
     "yeoman-environment": "^2.8.0",
