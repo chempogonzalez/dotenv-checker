@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 /**
  * Default prompt first question when the env file doesn't exist
  */
@@ -29,24 +30,22 @@ const updateQuestion = {
  *
  * @returns Array<object>
  */
-export const getQuestions = (attributes, updateEnv) => {
-  return attributes.reduce((prev, curr, index) => {
-    if (curr) {
-      const question = {
-        type: 'input',
-        name: `question-${index}`,
-        message: `${curr}=`,
-        default: '',
-        when: (answers) => answers.createFile === true,
-        validate: (input) => (input.length < 1) ? 'Value cannot be empty' : true,
-        filter: (input) => (input.length < 1) ? '' : `${curr}=${input}`,
-        transformer: (input) => (input.length < 1) ? '' : input.split('=')[1] || input,
-      }
-      return [
-        ...prev,
-        question,
-      ];
-    }
-    return [...prev];
-  }, [updateEnv ? updateQuestion : defaultQuestion]);
-}
+export const getQuestions = (attributes, updateEnv) => attributes.reduce((prev, curr, index) => {
+  if (curr) {
+    const question = {
+      type: 'input',
+      name: `question-${index}`,
+      message: `${curr}=`,
+      default: '',
+      when: (answers) => answers.createFile === true,
+      validate: (input) => ((input.length < 1) ? 'Value cannot be empty' : true),
+      filter: (input) => ((input.length < 1) ? '' : `${curr}=${input}`),
+      transformer: (input) => ((input.length < 1) ? '' : input.split('=')[1] || input),
+    };
+    return [
+      ...prev,
+      question,
+    ];
+  }
+  return [...prev];
+}, [updateEnv ? updateQuestion : defaultQuestion]);

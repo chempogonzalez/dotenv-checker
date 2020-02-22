@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import Colors from './colors';
 
 /**
@@ -27,9 +28,7 @@ const monthNames = [
  *
  * @returns string
  */
-const padStringTwoNumbers = (value) => {
-  return `${value}`.padStart(2, '0');
-}
+const padStringTwoNumbers = (value) => `${value}`.padStart(2, '0');
 
 
 /**
@@ -50,7 +49,7 @@ const formatDate = () => {
   const seconds = padStringTwoNumbers(date.getSeconds());
   const milliseconds = `${date.getMilliseconds()}`.padStart(3, '0');
   return `📅 ${day}/${month}/${year} 🕐 ${hour}:${minutes}:${seconds}:${milliseconds} `;
-}
+};
 
 export const logError = (error) => {
   console.error(`${formatDate()}${Colors.Bright}${Colors.FgRed}[❌ ERROR]${Colors.Reset} %s`, error);

@@ -1,3 +1,5 @@
+/* eslint-disable guard-for-in */
+/* eslint-disable no-restricted-syntax */
 /**
  * @function cleanNullValuesFromArray
  *
@@ -29,22 +31,23 @@ const cleanNullValuesFromArray = (array) => {
  * @returns Array<string>
  */
 const arrayDiff = (schemaArray, envArray) => {
-  var a = [], diff = [];
+  const a = [];
+  const diff = [];
   const cleanedSchema = cleanNullValuesFromArray(schemaArray);
   const cleanedEnv = cleanNullValuesFromArray(envArray);
-  for (var i = 0; i < cleanedSchema.length; i++) {
-      a[schemaArray[i]] = true;
+  for (let i = 0; i < cleanedSchema.length; i += 1) {
+    a[schemaArray[i]] = true;
   }
-  for (var i = 0; i < cleanedEnv.length; i++) {
-      if (a[envArray[i]]) {
-          delete a[envArray[i]];
-      }
+  for (let i = 0; i < cleanedEnv.length; i += 1) {
+    if (a[envArray[i]]) {
+      delete a[envArray[i]];
+    }
   }
-  for (var k in a) {
-      diff.push(k);
+  for (const k in a) {
+    diff.push(k);
   }
   return diff;
-}
+};
 
 
 /**
@@ -62,7 +65,7 @@ export const getDifference = (schemaAttributes, envAttributes) => {
   const cleanedEnv = cleanNullValuesFromArray(envAttributes);
   const difference = arrayDiff(cleanedSchema, cleanedEnv);
   return difference;
-}
+};
 
 
 /**
@@ -86,7 +89,7 @@ export const getAttributesFromContent = (fileContent) => {
     }
     return [...prev];
   }, []);
-}
+};
 
 
 /**
@@ -107,4 +110,4 @@ export const getEnvContent = (answers) => {
     }
   }
   return content;
-}
+};

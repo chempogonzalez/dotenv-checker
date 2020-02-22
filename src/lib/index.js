@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 import {
   getAttributesFromContent,
   getDifference,
@@ -19,14 +20,14 @@ import { logError, logInfo, logWarn } from './logger';
 const defaultOptions = {
   schemaFile: '.env.schema',
   envFile: '.env',
-}
+};
 
 
 /**
  * @function checkEnvFile
  *
  * @description Checks if the environmet file already exists and compare it with the schema file.
- *              1. In case .env not exists, prompt questions to the user 
+ *              1. In case .env not exists, prompt questions to the user
  *                in order to fill the needed env variables and create the .env file
  *
  *              2. In case .env already exists, checks differences between env variable names from schema and .env file.
@@ -54,7 +55,7 @@ export const checkEnvFile = async (options = undefined) => {
   }
 
   const { schemaFile, envFile } = funcOptions;
-  
+
   try {
     // Check if schema file exists
     await fileExists(schemaFile);
@@ -78,35 +79,31 @@ export const checkEnvFile = async (options = undefined) => {
     createEnvFile(schemaAttributes, envFile);
     return;
   }
-    /**
-     * If no error were thrown executing 'fileExists',
-     * it means that already exists an env file and we need to
-     * start checking differences from schema file
-     */
-    const envContent = await readFile(envFile);
-    const envAttributes = await getAttributesFromContent(envContent);
-    const difference = getDifference(schemaAttributes, envAttributes);
 
-    /**
-     * If there are some differences between schema and env file
-     * We need to start the 'updateEnvFile' process
-     * 
-     * If no differences were found, it's ALL OK. Process finished
-     */ 
-    if (difference && difference.length > 0) {
-      logWarn(`Environment file differs from ${schemaFile}`);
-      updateEnvFile(difference, envContent, envFile);
-    } else {
-      logInfo(`✅ Environment file checked successfully`);
-    }
-  
-}
+  /**
+   * If no error were thrown executing 'fileExists',
+   * it means that already exists an env file and we need to
+   * start checking differences from schema file
+   */
+  const envContent = await readFile(envFile);
+  const envAttributes = await getAttributesFromContent(envContent);
+  const difference = getDifference(schemaAttributes, envAttributes);
 
+  /**
+   * If there are some differences between schema and env file
+   * We need to start the 'updateEnvFile' process
+   *
+   * If no differences were found, it's ALL OK. Process finished
+   */
+  if (difference && difference.length > 0) {
+    logWarn(`Environment file differs from ${schemaFile}`);
+    updateEnvFile(difference, envContent, envFile);
+  } else {
+    logInfo(`✅ Environment file checked successfully`);
+  }
+};
 
 
 checkEnvFile({
   schemaFile: '.env.example',
 });
-
-
-
