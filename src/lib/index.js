@@ -1,25 +1,52 @@
-
-import { prompt } from 'inquirer';
 import {
+  getAttributesFromContent,
+  getDifference,
+} from './helpers';
+import {
+  createEnvFile,
+  updateEnvFile,
   fileExists,
   readFile,
-  getAttributesFromContent,
-  getEnvContent,
-  writeFile,
-  getDifference,
-  cleanNullValuesFromArray,
-} from './helpers';
-import { logError, logInfo, log } from './logger';
-import { getQuestions } from './questions';
+} from './file';
+import { logError, logInfo, logWarn } from './logger';
 
+
+/**
+ * Default options
+ * 1. schemaFile : name/path+name of the file which is going to be the reference file to create the .env file
+ * 2. envFile: name/path+name of the file which is going to be created
+ */
 const defaultOptions = {
   schemaFile: '.env.schema',
   envFile: '.env',
-  outPut: '',
 }
 
+
+/**
+ * @function checkEnvFile
+ *
+ * @description Checks if the environmet file already exists and compare it with the schema file.
+ *              1. In case .env not exists, prompt questions to the user 
+ *                in order to fill the needed env variables and create the .env file
+ *
+ *              2. In case .env already exists, checks differences between env variable names from schema and .env file.
+ *                If there are some differences, ask the user to fill the needed variables to match schema variables.
+ *
+ * @param {object} options Main function options with the following possible values:
+ *                          1. **schemaFile** : name/path+name of the file which is going to be the reference file to create the .env file
+ *                          2. **envFile**: name/path+name of the file which is going to be created
+ *
+ * @returns Promise<void>
+ */
 export const checkEnvFile = async (options = undefined) => {
   let funcOptions;
+  let schemaAttributes;
+
+  /**
+   * Check if options are provided
+   * if TRUE, merge with defaultOptions
+   * if FALSE, set defaultOptions to the object
+   */
   if (!options) {
     funcOptions = defaultOptions;
   } else {
@@ -28,11 +55,13 @@ export const checkEnvFile = async (options = undefined) => {
 
   const { schemaFile, envFile } = funcOptions;
   
-  let schemaAttributes;
-
-  // Check schema file is ok
   try {
+    // Check if schema file exists
     await fileExists(schemaFile);
+
+    /**
+     * Read schema file and get env variable names to be used later in order to create the environment file
+     */
     const schemaContent = await readFile(schemaFile);
     schemaAttributes = getAttributesFromContent(schemaContent);
     logInfo(`✅ Schema file checked successfully`);
@@ -41,43 +70,37 @@ export const checkEnvFile = async (options = undefined) => {
     return;
   }
 
-  // Check environment file
   try {
+    // Check if environment file exists
     await fileExists(envFile);
-    // In case environment file exists, check differences from schema file
+  } catch (err) {
+    // If an error were found Create Env file when the file doesn't exist
+    createEnvFile(schemaAttributes, envFile);
+    return;
+  }
+    /**
+     * If no error were thrown executing 'fileExists',
+     * it means that already exists an env file and we need to
+     * start checking differences from schema file
+     */
     const envContent = await readFile(envFile);
     const envAttributes = await getAttributesFromContent(envContent);
     const difference = getDifference(schemaAttributes, envAttributes);
+
+    /**
+     * If there are some differences between schema and env file
+     * We need to start the 'updateEnvFile' process
+     * 
+     * If no differences were found, it's ALL OK. Process finished
+     */ 
     if (difference && difference.length > 0) {
-      updateEnvFile(difference, envContent);
+      logWarn(`Environment file differs from ${schemaFile}`);
+      updateEnvFile(difference, envContent, envFile);
     } else {
       logInfo(`✅ Environment file checked successfully`);
     }
-  } catch (err) {
-    // Create Env file when the file doesn't exist
-    createEnvFile(schemaAttributes);
-  }
+  
 }
-
-
-const createEnvFile = async (attributes) => {
-  const questions = getQuestions(attributes);
-  const answers = await prompt(questions);
-  const envContent = await getEnvContent(questions, answers);
-  await writeFile('.env', envContent);
-  logInfo(`✅ Environment file has been created successfully`);
-}
-
-const updateEnvFile = async (attributes, envContent) => {
-  const questions = getQuestions(attributes, true);
-  const answers = await prompt(questions);
-  const addedEnvContent = await getEnvContent(questions, answers);
-  const cleanedCurrEnvContent = cleanNullValuesFromArray(envContent.split('\n')).map(c => `${c}\n`);
-  const newEnvContent = `${cleanedCurrEnvContent}${addedEnvContent}`;
-  await writeFile('.env', newEnvContent);
-  if (Object.keys(answers).length > 1) logInfo(`✅ Environment file has been updated successfully`);
-}
-
 
 
 

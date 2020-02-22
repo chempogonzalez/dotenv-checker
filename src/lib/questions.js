@@ -1,3 +1,6 @@
+/**
+ * Default prompt first question when the env file doesn't exist
+ */
 const defaultQuestion = {
   type: 'confirm',
   name: 'createFile',
@@ -5,6 +8,9 @@ const defaultQuestion = {
   default: true,
 };
 
+/**
+ * First question for prompt when the env file doesn't match with the schema file
+ */
 const updateQuestion = {
   type: 'confirm',
   name: 'createFile',
@@ -13,7 +19,16 @@ const updateQuestion = {
 };
 
 
-
+/**
+ * @function getQuestions
+ *
+ * @description Format object array with the questions object based on attributes provided
+ *
+ * @param {Array<string>} attributes Attributes to be asked for
+ * @param {boolean} updateEnv Flag to change first question message
+ *
+ * @returns Array<object>
+ */
 export const getQuestions = (attributes, updateEnv) => {
   return attributes.reduce((prev, curr, index) => {
     if (curr) {
@@ -23,7 +38,9 @@ export const getQuestions = (attributes, updateEnv) => {
         message: `${curr}=`,
         default: '',
         when: (answers) => answers.createFile === true,
-        validate: (input) => input.length < 1 ? 'Value cannot be empty' : true,
+        validate: (input) => (input.length < 1) ? 'Value cannot be empty' : true,
+        filter: (input) => (input.length < 1) ? '' : `${curr}=${input}`,
+        transformer: (input) => (input.length < 1) ? '' : input.split('=')[1] || input,
       }
       return [
         ...prev,

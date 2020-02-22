@@ -1,5 +1,8 @@
 import Colors from './colors';
 
+/**
+ * Short month names
+ */
 const monthNames = [
   'Jan',
   'Feb',
@@ -15,20 +18,29 @@ const monthNames = [
   'Dec',
 ];
 
+/**
+ * @function padStringTwotNumbers
+ *
+ * @description Pads provided value to ensure it has 2 characters and add a 0 at the string start if it's needed
+ *
+ * @param {number|string} value Value to be formatted if needed
+ *
+ * @returns string
+ */
 const padStringTwoNumbers = (value) => {
   return `${value}`.padStart(2, '0');
 }
 
+
 /**
  * @function formatDate
  *
- * @description This funcion get date now and format.
+ * @description Gets and format current date (Date.now())
  *
- * @returns {string} - Return string with date formated.
+ * @returns {string} - Returns string with formatted date
  *
  */
 const formatDate = () => {
-
   const date = new Date();
   const day = padStringTwoNumbers(date.getDate());
   const month = monthNames[date.getMonth()];
@@ -44,9 +56,12 @@ export const logError = (error) => {
   console.error(`${formatDate()}${Colors.Bright}${Colors.FgRed}[❌ ERROR]${Colors.Reset} %s`, error);
 };
 
-
 export const logInfo = (info) => {
-  console.info(`${formatDate()}${Colors.Bright}${Colors.FgGreen}[📗 INFO]${Colors.Reset} %s`, info);
+  console.info(`${formatDate()}${Colors.Bright}${Colors.FgGreen}[📗  INFO]${Colors.Reset} %s`, info);
+};
+
+export const logWarn = (info) => {
+  console.info(`${formatDate()}${Colors.Bright}${Colors.FgYellow}[🚧  WARN]${Colors.Reset} %s`, info);
 };
 
 export const log = (value) => {
