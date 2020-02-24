@@ -1,15 +1,15 @@
-# Env-generator - Environment file generator [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
+# ENV-generator - Environment file generator [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 
 
 ## Description
 
-This application is a simple checker/generator for environment files. It checks based on a schema file, if your .env is up-to-date compared with schema variables. 
+This application is a simple checker/generator for environment files. It checks, based on a schema file, if your .env is up-to-date compared with schema variables. 
 
 In case you don't have .env file created or if it differs from schema file, it allows you to create the file through terminal prompt.
 
-## 🚀 USAGE
+## 🚀 Usage
 
-As the library process are done asynchronously it returns a `Promise<void>` when the process is done.
+As the library process are executed asynchronously it returns a `Promise<void>` when the process is done.
 ```js
 /**
  * Import the env-generator library
@@ -88,7 +88,7 @@ $npm i
 ```
 
 
-### 3️⃣ Development
+### 2️⃣ Development
 
 To start working locally with the project you will need to execute the following command:
 
