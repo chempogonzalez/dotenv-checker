@@ -72,6 +72,10 @@ const logWarn = (info) => {
   console.warn(`${formatDate()}${colours.Bright}${colours.FgYellow}[🚧  WARN]${colours.Reset} %s`, info);
 };
 
+const logAlert = (info) => {
+  console.warn(`${formatDate()}${colours.Bright}${colours.FgRed}[❗️  ALERT]${colours.Reset} %s`, info);
+};
+
 const log = (value) => {
   console.log(`${formatDate()}${colours.Bright}[📋 LOG]${colours.Reset} %s`, value);
 };
@@ -80,5 +84,6 @@ module.exports = {
   logError,
   logInfo,
   logWarn,
+  logAlert,
   log,
 };

@@ -9,7 +9,12 @@ const {
   fileExists,
   readFile,
 } = require('./file');
-const { logError, logInfo, logWarn } = require('./logger');
+const {
+  logError,
+  logInfo,
+  logWarn,
+  logAlert,
+} = require('./logger');
 
 
 /**
@@ -75,7 +80,8 @@ const checkEnvFile = async (options = undefined) => {
     // Check if environment file exists
     await fileExists(envFile);
   } catch (err) {
-    // If an error were found Create Env file when the file doesn't exist
+    // If an error were found, execute 'Create Env file' when the file doesn't exist
+    logAlert(`${envFile} file doesn't exist`);
     createEnvFile(schemaAttributes, envFile);
     return;
   }

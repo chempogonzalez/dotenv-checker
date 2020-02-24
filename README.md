@@ -1,11 +1,19 @@
 # ENV-generator - Environment file generator [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 
 
-## Description
+## 🔖 Description
 
 This application is a simple checker/generator for environment files. It checks, based on a schema file, if your .env is up-to-date compared with schema variables. 
 
 In case you don't have .env file created or if it differs from schema file, it allows you to create the file through terminal prompt.
+
+## 💻 Examples
+
+### 🔴 When environment file doesn't exist
+![Create file example](assets/create-file.svg)
+
+### 🔵 When environment file doesn't have some needed variable indicated in schema file
+![Update file example](assets/update-file.svg)
 
 ## 🚀 Usage
 

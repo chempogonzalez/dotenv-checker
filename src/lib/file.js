@@ -52,11 +52,14 @@ const createEnvFile = async (attributes, envFile) => {
   const questions = getQuestions(attributes);
   // Start questions to fill env varialbes through user input
   const answers = await prompt(questions);
-  // Get the environment file content well formatted
-  const envContent = await getEnvContent(answers);
-  // Write the environment file with the filled content
-  await writeFile(envFile, envContent);
-  logInfo(`✅ Environment file has been created successfully`);
+  // If user said NO to create the environment file, then the answers length is going to be 1
+  if (Object.keys(answers).length > 1) {
+    // Get the environment file content well formatted
+    const envContent = await getEnvContent(answers);
+    // Write the environment file with the filled content
+    await writeFile(envFile, envContent);
+    logInfo(`✅ Environment file has been created successfully`);
+  }
 };
 
 
@@ -77,15 +80,18 @@ const updateEnvFile = async (attributes, envContent, envFile) => {
   const questions = getQuestions(attributes, true);
   // Start questions to fill env varialbes through terminal
   const answers = await prompt(questions);
-  // Get the environment file content well formatted
-  const addedEnvContent = await getEnvContent(answers);
-  // Clean empty lines from existing environmet file
-  const cleanedCurrEnvContent = envContent.split('\n').filter((c) => !!c);
-  // Concat cleaned existing environment file content with the new filled content
-  const newEnvContent = `${cleanedCurrEnvContent.join('\n')}\n${addedEnvContent}`;
-  // Update the environment file with the current content and the new appended content
-  await writeFile(envFile, newEnvContent);
-  if (Object.keys(answers).length > 1) logInfo(`✅ Environment file has been updated successfully`);
+  // If user said NO to update the environment file, then the answers length is going to be 1
+  if (Object.keys(answers).length > 1) {
+    // Get the environment file content well formatted
+    const addedEnvContent = await getEnvContent(answers);
+    // Clean empty lines from existing environmet file
+    const cleanedCurrEnvContent = envContent.split('\n').filter((c) => !!c);
+    // Concat cleaned existing environment file content with the new filled content
+    const newEnvContent = `${cleanedCurrEnvContent.join('\n')}\n${addedEnvContent}`;
+    // Update the environment file with the current content and the new appended content
+    await writeFile(envFile, newEnvContent);
+    logInfo(`✅ Environment file has been updated successfully`);
+  }
 };
 
 
