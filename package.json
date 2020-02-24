@@ -1,6 +1,6 @@
 {
   "name": "env-generator",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "🔌 Generates through prompts the .env variables file based on a schema/defaults file",
   "main": "./src/index.js",
   "scripts": {

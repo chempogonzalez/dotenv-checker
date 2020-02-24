@@ -14,10 +14,10 @@ npm i env-generator
 ## 💻 Examples
 
 ### 🔴 When environment file doesn't exist
-![Create file example](assets/create-env.png)
+![Create file example](assets/create-file.svg)
 
 ### 🔵 When environment file doesn't have some needed variable indicated in schema file
-![Update file example](assets/update-env.png)
+![Update file example](assets/update-file.svg)
 
 ## 🚀 Usage
 
