@@ -1,6 +1,6 @@
 {
   "name": "dotenv-checker",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "🔌 Generates through prompts the .env variables file based on a schema/defaults file",
   "main": "./src/index.js",
   "scripts": {
@@ -14,10 +14,15 @@
     "url": "git+https://github.com/chempogonzalez/dotenv-checker.git"
   },
   "keywords": [
+    "dotenv",
+    "config",
+    "conf",
     "env",
     "environment",
+    "file",
     "generator",
-    "checker"
+    "checker",
+    "check"
   ],
   "author": "chempogonzalez",
   "license": "ISC",
