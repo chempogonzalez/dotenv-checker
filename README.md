@@ -7,13 +7,17 @@ This application is a simple checker/generator for environment files. It checks,
 
 In case you don't have .env file created or if it differs from schema file, it allows you to create the file through terminal prompt.
 
+## 📐 Installation
+```bash
+npm i env-generator
+```
 ## 💻 Examples
 
 ### 🔴 When environment file doesn't exist
-![Create file example](assets/create-file.svg)
+![Create file example](assets/create-env.png)
 
 ### 🔵 When environment file doesn't have some needed variable indicated in schema file
-![Update file example](assets/update-file.svg)
+![Update file example](assets/update-env.png)
 
 ## 🚀 Usage
 
@@ -29,7 +33,7 @@ import { checkEnvFile } from 'env-generator';
 await checkEnvFile();
 ```
 
-### ⚙️ Usage with custom options
+## ⚙️ Usage with custom options
 
 The library allows you to customize some options:
 - `schemaFile` (default `'.env.schema'`) -- Allows you to specify the schema file with a custom name or location _(paths must be specified from root directory)_
@@ -75,7 +79,7 @@ Guideline JS and CSS.
 - [InquirerJS](https://github.com/SBoudrias/Inquirer.js/)
 
 
-## 📐 How to work with this project
+## 👷 How to work with this project
 
 ### ✅ Prerequisites
 
