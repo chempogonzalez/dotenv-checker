@@ -1,5 +1,5 @@
 {
-  "name": "env-generator",
+  "name": "dotenv-checker",
   "version": "1.0.0",
   "description": "🔌 Generates through prompts the .env variables file based on a schema/defaults file",
   "main": "./src/index.js",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/chempogonzalez/env-generator.git"
+    "url": "git+https://github.com/chempogonzalez/dotenv-checker.git"
   },
   "keywords": [
     "env",
@@ -22,9 +22,9 @@
   "author": "chempogonzalez",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/chempogonzalez/env-generator/issues"
+    "url": "https://github.com/chempogonzalez/dotenv-checker/issues"
   },
-  "homepage": "https://github.com/chempogonzalez/env-generator#readme",
+  "homepage": "https://github.com/chempogonzalez/dotenv-checker#readme",
   "devDependencies": {
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.0.0",

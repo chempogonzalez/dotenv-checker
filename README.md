@@ -1,4 +1,4 @@
-# ENV-generator - Environment file generator [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
+# dotENV-checker - Environment file checker/generator [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 
 
 ## 🔖 Description
@@ -9,8 +9,8 @@ In case you don't have .env file created or if it differs from schema file, it a
 
 ## 📐 Installation
 ```bash
-npm i --save-dev env-generator
-```
+npm i --save-dev dotenv-checker
+```g
 ## 💻 Examples
 
 ### 🔴 When environment file doesn't exist
@@ -24,10 +24,10 @@ npm i --save-dev env-generator
 As the library process are executed asynchronously it returns a `Promise<void>` when the process is done.
 ```js
 /**
- * Import the env-generator library
+ * Import the dotenv-checker library
  * (main method with object destructuring)
  **/
-import { checkEnvFile } from 'env-generator';
+import { checkEnvFile } from 'dotenv-checker';
 
 // Check environment variable with default config
 await checkEnvFile();
@@ -41,12 +41,12 @@ The library allows you to customize some options:
 
 ```js
 /**
- * Import the env-generator library
+ * Import the dotenv-checker library
  * (main method with object destructuring)
  **/
-import { checkEnvFile } from 'env-generator';
+import { checkEnvFile } from 'dotenv-checker';
 
-// Check environment variable with default config
+// Check environment variable with custom config
 await checkEnvFile({
   schemaFile: '.env.example',
   envFile: '.env.local',
