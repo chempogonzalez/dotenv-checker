@@ -9,7 +9,7 @@ In case you don't have .env file created or if it differs from schema file, it a
 
 ## 📐 Installation
 ```bash
-npm i env-generator
+npm i --save-dev env-generator
 ```
 ## 💻 Examples
 
