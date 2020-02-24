@@ -1,4 +1,5 @@
-# dotENV-checker - Environment file checker/generator [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
+# 🔌 dotENV-checker [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
+## Environment file checker/generator 
 
 
 ## 🔖 Description
