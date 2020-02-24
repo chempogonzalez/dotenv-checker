@@ -65,16 +65,16 @@ Guideline JS and CSS.
 
 - [NodeJS](https://nodejs.org/)
 - [InquirerJS](https://github.com/SBoudrias/Inquirer.js/)
-- [Jest](https://jestjs.io/docs/en/getting-started)
 
-## ✅ Prerequisites
+
+## 📐 How to work with this project
+
+### ✅ Prerequisites
 
 In order to work with this project, your local environment must have at least the following versions:
 
 * NodeJS Version: 10.xx or higher
 * NPM Version: 6.12.0
-
-## 📐 How to work with this project
 
 The following steps must be followed in order to work with this project locally.
 
