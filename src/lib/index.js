@@ -1,15 +1,15 @@
 /* eslint-disable import/prefer-default-export */
-import {
+const {
   getAttributesFromContent,
   getDifference,
-} from './helpers';
-import {
+} = require('./helpers');
+const {
   createEnvFile,
   updateEnvFile,
   fileExists,
   readFile,
-} from './file';
-import { logError, logInfo, logWarn } from './logger';
+} = require('./file');
+const { logError, logInfo, logWarn } = require('./logger');
 
 
 /**
@@ -39,7 +39,7 @@ const defaultOptions = {
  *
  * @returns Promise<void>
  */
-export const checkEnvFile = async (options = undefined) => {
+const checkEnvFile = async (options = undefined) => {
   let funcOptions;
   let schemaAttributes;
 
@@ -103,7 +103,6 @@ export const checkEnvFile = async (options = undefined) => {
   }
 };
 
-
-checkEnvFile({
-  schemaFile: '.env.example',
-});
+module.exports = {
+  checkEnvFile,
+};

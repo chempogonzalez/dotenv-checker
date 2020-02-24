@@ -1,3 +1,1 @@
-import '@babel/polyfill';
-
-export * from './lib';
+module.exports = require('./lib');

@@ -1,5 +1,7 @@
 /* eslint-disable guard-for-in */
 /* eslint-disable no-restricted-syntax */
+
+
 /**
  * @function cleanNullValuesFromArray
  *
@@ -60,7 +62,7 @@ const arrayDiff = (schemaArray, envArray) => {
  *
  * @returns Array<string>
  */
-export const getDifference = (schemaAttributes, envAttributes) => {
+const getDifference = (schemaAttributes, envAttributes) => {
   const cleanedSchema = cleanNullValuesFromArray(schemaAttributes);
   const cleanedEnv = cleanNullValuesFromArray(envAttributes);
   const difference = arrayDiff(cleanedSchema, cleanedEnv);
@@ -77,7 +79,7 @@ export const getDifference = (schemaAttributes, envAttributes) => {
  *
  * @returns Array<string>
  */
-export const getAttributesFromContent = (fileContent) => {
+const getAttributesFromContent = (fileContent) => {
   const lines = fileContent.split('\n');
   return lines.reduce((prev, curr) => {
     if (curr) {
@@ -102,7 +104,7 @@ export const getAttributesFromContent = (fileContent) => {
  *
  * @returns string
  */
-export const getEnvContent = (answers) => {
+const getEnvContent = (answers) => {
   let content = '';
   for (const key in answers) {
     if (key.includes('-')) {
@@ -110,4 +112,10 @@ export const getEnvContent = (answers) => {
     }
   }
   return content;
+};
+
+module.exports = {
+  getEnvContent,
+  getAttributesFromContent,
+  getDifference,
 };

@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-import Colors from './colors';
 
 /**
  * Short month names
@@ -18,6 +17,16 @@ const monthNames = [
   'Nov',
   'Dec',
 ];
+
+/** */
+const colours = {
+  Reset: `\x1b[0m`,
+  Bright: `\x1b[1m`,
+  FgRed: `\x1b[31m`,
+  FgGreen: `\x1b[32m`,
+  FgYellow: `\x1b[33m`,
+};
+
 
 /**
  * @function padStringTwotNumbers
@@ -51,18 +60,25 @@ const formatDate = () => {
   return `📅 ${day}/${month}/${year} 🕐 ${hour}:${minutes}:${seconds}:${milliseconds} `;
 };
 
-export const logError = (error) => {
-  console.error(`${formatDate()}${Colors.Bright}${Colors.FgRed}[❌ ERROR]${Colors.Reset} %s`, error);
+const logError = (error) => {
+  console.error(`${formatDate()}${colours.Bright}${colours.FgRed}[❌ ERROR]${colours.Reset} %s`, error);
 };
 
-export const logInfo = (info) => {
-  console.info(`${formatDate()}${Colors.Bright}${Colors.FgGreen}[📗  INFO]${Colors.Reset} %s`, info);
+const logInfo = (info) => {
+  console.info(`${formatDate()}${colours.Bright}${colours.FgGreen}[📗  INFO]${colours.Reset} %s`, info);
 };
 
-export const logWarn = (info) => {
-  console.info(`${formatDate()}${Colors.Bright}${Colors.FgYellow}[🚧  WARN]${Colors.Reset} %s`, info);
+const logWarn = (info) => {
+  console.warn(`${formatDate()}${colours.Bright}${colours.FgYellow}[🚧  WARN]${colours.Reset} %s`, info);
 };
 
-export const log = (value) => {
-  console.log(`${formatDate()}${Colors.Bright}[📋 LOG]${Colors.Reset} %s`, value);
+const log = (value) => {
+  console.log(`${formatDate()}${colours.Bright}[📋 LOG]${colours.Reset} %s`, value);
+};
+
+module.exports = {
+  logError,
+  logInfo,
+  logWarn,
+  log,
 };

@@ -30,7 +30,7 @@ const updateQuestion = {
  *
  * @returns Array<object>
  */
-export const getQuestions = (attributes, updateEnv) => attributes.reduce((prev, curr, index) => {
+const getQuestions = (attributes, updateEnv) => attributes.reduce((prev, curr, index) => {
   if (curr) {
     const question = {
       type: 'input',
@@ -49,3 +49,7 @@ export const getQuestions = (attributes, updateEnv) => attributes.reduce((prev, 
   }
   return [...prev];
 }, [updateEnv ? updateQuestion : defaultQuestion]);
+
+module.exports = {
+  getQuestions,
+};

@@ -1,13 +1,13 @@
 {
   "name": "env-generator",
   "version": "1.0.0",
-  "description": "Generates through prompts the .env variables file based on a schema/defaults file",
-  "main": "index.js",
+  "description": "🔌 Generates through prompts the .env variables file based on a schema/defaults file",
+  "main": "./src/index.js",
   "scripts": {
-    "start": "npm run build && node dist/index.js",
-    "start:watch": "nodemon --exec babel-node src/index.js",
-    "build": "babel src --out-dir dist",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node .",
+    "start:watch": "nodemon",
+    "lint": "eslint src/**/*",
+    "lint:copy-paste": "jscpd ."
   },
   "repository": {
     "type": "git",
@@ -16,7 +16,8 @@
   "keywords": [
     "env",
     "environment",
-    "generator"
+    "generator",
+    "checker"
   ],
   "author": "chempogonzalez",
   "license": "ISC",
@@ -25,18 +26,28 @@
   },
   "homepage": "https://github.com/chempogonzalez/env-generator#readme",
   "devDependencies": {
-    "@babel/cli": "^7.8.4",
-    "@babel/core": "^7.8.4",
-    "@babel/node": "^7.8.4",
-    "@babel/preset-env": "^7.8.4",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.20.1",
+    "jscpd": "^2.0.16",
     "nodemon": "^2.0.2"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.8.3",
     "app-root-path": "^3.0.0",
     "inquirer": "^7.0.4"
+  },
+  "jscpd": {
+    "mode": "mild",
+    "reporters": [
+      "console",
+      "time"
+    ],
+    "ignore": [
+      "**/__tests__/**",
+      "**/__mocks__/**",
+      "**/package.json"
+    ],
+    "absolute": true,
+    "gitignore": true
   }
 }

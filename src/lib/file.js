@@ -1,11 +1,9 @@
-import { prompt } from 'inquirer';
-import root from 'app-root-path';
-import fs from 'fs';
-import {
-  getEnvContent,
-} from './helpers';
-import { logInfo } from './logger';
-import { getQuestions } from './questions';
+const { prompt } = require('inquirer');
+const root = require('app-root-path');
+const fs = require('fs');
+const { getEnvContent } = require('./helpers');
+const { logInfo } = require('./logger');
+const { getQuestions } = require('./questions');
 
 const { path: rootPath } = root;
 
@@ -20,7 +18,7 @@ const { path: rootPath } = root;
  *
  * @returns Promise<void>
  */
-export const writeFile = (FILE, text) => new Promise((resolve, reject) => {
+const writeFile = (FILE, text) => new Promise((resolve, reject) => {
   const fullPath = `${rootPath}/${FILE}`;
   const folderPath = fullPath.substring(0, fullPath.lastIndexOf('/'));
   try {
@@ -49,7 +47,7 @@ export const writeFile = (FILE, text) => new Promise((resolve, reject) => {
  *
  * @returns void
  */
-export const createEnvFile = async (attributes, envFile) => {
+const createEnvFile = async (attributes, envFile) => {
   // Get questions to be displayed through terminal
   const questions = getQuestions(attributes);
   // Start questions to fill env varialbes through user input
@@ -74,7 +72,7 @@ export const createEnvFile = async (attributes, envFile) => {
  *
  * @returns void
  */
-export const updateEnvFile = async (attributes, envContent, envFile) => {
+const updateEnvFile = async (attributes, envContent, envFile) => {
   // Get questions to be displayed through terminal
   const questions = getQuestions(attributes, true);
   // Start questions to fill env varialbes through terminal
@@ -100,7 +98,7 @@ export const updateEnvFile = async (attributes, envContent, envFile) => {
  *
  * @returns Promise<string>
  */
-export const readFile = (FILE) => new Promise((resolve, reject) => {
+const readFile = (FILE) => new Promise((resolve, reject) => {
   const fullPath = `${rootPath}/${FILE}`;
   fs.readFile(fullPath, "utf8", (err, data) => {
     if (err) reject(err);
@@ -118,7 +116,7 @@ export const readFile = (FILE) => new Promise((resolve, reject) => {
  *
  * @returns Promise<boolean
  */
-export const fileExists = (FILE) => new Promise((resolve, reject) => {
+const fileExists = (FILE) => new Promise((resolve, reject) => {
   const fullPath = `${rootPath}/${FILE}`;
   fs.access(fullPath, fs.F_OK, (err) => {
     if (err) {
@@ -127,3 +125,11 @@ export const fileExists = (FILE) => new Promise((resolve, reject) => {
     resolve(true);
   });
 });
+
+module.exports = {
+  fileExists,
+  readFile,
+  updateEnvFile,
+  createEnvFile,
+  writeFile,
+};
