@@ -11,7 +11,7 @@ In case you don't have .env file created or if it differs from schema file, it a
 ## 📐 Installation
 ```bash
 npm i --save-dev dotenv-checker
-```g
+```
 ## 💻 Examples
 
 ### 🔴 When environment file doesn't exist
