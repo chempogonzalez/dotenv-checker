@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 /**
  * Default prompt first question when the env file doesn't exist
  */

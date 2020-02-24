@@ -1,11 +1,11 @@
-const { prompt } = require('inquirer');
-const root = require('app-root-path');
 const fs = require('fs');
+const appRoot = require('app-root-path');
+const { prompt } = require('inquirer');
 const { getEnvContent } = require('./helpers');
 const { logInfo } = require('./logger');
 const { getQuestions } = require('./questions');
 
-const { path: rootPath } = root;
+const { path: rootPath } = appRoot;
 
 
 /**

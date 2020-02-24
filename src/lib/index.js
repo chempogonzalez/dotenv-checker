@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 const {
   getAttributesFromContent,
   getDifference,
@@ -73,7 +72,7 @@ const checkEnvFile = async (options = undefined) => {
     logInfo(`✅ Schema file checked successfully`);
   } catch (err) {
     logError(`Trying to read 📄${schemaFile} file.`);
-    return;
+    throw Error(`Error trying to read 📄${schemaFile} file.`);
   }
 
   try {
