@@ -20,11 +20,26 @@ import { checkEnvFile } from 'env-generator';
 // Check environment variable with default config
 await checkEnvFile();
 ```
+
 ### ⚙️ Usage with custom options
 
 The library allows you to customize some options:
 - `schemaFile` (default `'.env.schema'`) -- Allows you to specify the schema file with a custom name or location _(paths must be specified from root directory)_
 - `envFile` (default `'.env'`) -- Allows you to specify the environment file to be created/checked with a custom name or location _(paths must be specified from root directory)_
+
+```js
+/**
+ * Import the env-generator library
+ * (main method with object destructuring)
+ **/
+import { checkEnvFile } from 'env-generator';
+
+// Check environment variable with default config
+await checkEnvFile({
+  schemaFile: '.env.example',
+  envFile: '.env.local',
+});
+```
 
 <br/>
 
