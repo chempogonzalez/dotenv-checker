@@ -15,10 +15,10 @@ npm i --save-dev dotenv-checker
 ```
 ## 💻 Examples
 
-### 🔴 When environment file doesn't exist
+#### 🔴 When environment file doesn't exist
 ![Create file example](assets/create-file.svg)
 
-### 🔵 When environment file doesn't have some needed variable indicated in schema file
+#### 🔵 When environment file doesn't have some needed variable indicated in schema file
 ![Update file example](assets/update-file.svg)
 
 ## 🚀 Usage

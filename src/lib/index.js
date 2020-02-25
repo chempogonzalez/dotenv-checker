@@ -81,7 +81,7 @@ const checkEnvFile = async (options = undefined) => {
   } catch (err) {
     // If an error were found, execute 'Create Env file' when the file doesn't exist
     logAlert(`${envFile} file doesn't exist`);
-    createEnvFile(schemaAttributes, envFile);
+    await createEnvFile(schemaAttributes, envFile);
     return;
   }
 
@@ -102,7 +102,7 @@ const checkEnvFile = async (options = undefined) => {
    */
   if (difference && difference.length > 0) {
     logWarn(`Environment file differs from ${schemaFile}`);
-    updateEnvFile(difference, envContent, envFile);
+    await updateEnvFile(difference, envContent, envFile);
   } else {
     logInfo(`✅ Environment file checked successfully`);
   }
