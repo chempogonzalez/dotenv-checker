@@ -9,6 +9,9 @@
     "lint": "eslint src/**/*",
     "lint:copy-paste": "jscpd ."
   },
+  "bin": {
+    "dotenv-checker": "./src/cli.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/chempogonzalez/dotenv-checker.git"
@@ -39,7 +42,8 @@
   },
   "dependencies": {
     "app-root-path": "^3.0.0",
-    "inquirer": "^7.0.4"
+    "inquirer": "^7.0.4",
+    "yargs": "^15.1.0"
   },
   "jscpd": {
     "mode": "mild",
