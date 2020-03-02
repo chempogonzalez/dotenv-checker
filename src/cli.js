@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+const path = require('path');
 const { argv } = require('yargs').options({
   env: {
     alias: 'e',
@@ -20,6 +21,10 @@ const { argv } = require('yargs').options({
 const { checkEnvFile } = require('.');
 
 const workingDir = process.cwd();
+let schemaFile = argv.schema || '.env.schema';
+if (path.isAbsolute(schemaFile)) schemaFile = `${workingDir}/${schemaFile}`;
+let envFile = argv.env || '.env.schema';
+if (path.isAbsolute(envFile)) envFile = `${workingDir}/${envFile}`;
 const options = {
   schemaFile: `${workingDir}/${argv.schema || '.env.schema'}`,
   envFile: `${workingDir}/${argv.env || '.env'}`,

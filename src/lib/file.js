@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 const appRoot = require('app-root-path');
 const { prompt } = require('inquirer');
 const { getEnvContent } = require('./helpers');
@@ -19,7 +20,7 @@ const { path: rootPath } = appRoot;
  * @returns Promise<void>
  */
 const writeFile = (FILE, text) => new Promise((resolve, reject) => {
-  const fullPath = `${FILE.startsWith('/') ? '' : `${rootPath}/`}/${FILE}`;
+  const fullPath = `${path.isAbsolute(FILE) ? '' : `${rootPath}/`}/${FILE}`;
   const folderPath = fullPath.substring(0, fullPath.lastIndexOf('/'));
   try {
     fs.mkdir(folderPath, { recursive: true }, (err) => {
@@ -105,7 +106,7 @@ const updateEnvFile = async (attributes, envContent, envFile) => {
  * @returns Promise<string>
  */
 const readFile = (FILE) => new Promise((resolve, reject) => {
-  const fullPath = `${FILE.startsWith('/') ? '' : `${rootPath}/`}/${FILE}`;
+  const fullPath = `${path.isAbsolute(FILE) ? '' : `${rootPath}/`}/${FILE}`;
   fs.readFile(fullPath, "utf8", (err, data) => {
     if (err) reject(err);
     else resolve(data);
@@ -123,7 +124,7 @@ const readFile = (FILE) => new Promise((resolve, reject) => {
  * @returns Promise<boolean>
  */
 const fileExists = (FILE) => new Promise((resolve, reject) => {
-  const fullPath = `${FILE.startsWith('/') ? '' : `${rootPath}/`}/${FILE}`;
+  const fullPath = `${path.isAbsolute(FILE) ? '' : `${rootPath}/`}/${FILE}`;
   fs.access(fullPath, fs.F_OK, (err) => {
     if (err) {
       reject(err);
