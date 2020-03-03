@@ -22,11 +22,11 @@ const { checkEnvFile } = require('.');
 
 const workingDir = process.cwd();
 let schemaFile = argv.schema || '.env.schema';
-if (path.isAbsolute(schemaFile)) schemaFile = `${workingDir}/${schemaFile}`;
-let envFile = argv.env || '.env.schema';
-if (path.isAbsolute(envFile)) envFile = `${workingDir}/${envFile}`;
+if (!path.isAbsolute(schemaFile)) schemaFile = `${workingDir}/${schemaFile}`;
+let envFile = argv.env || '.env';
+if (!path.isAbsolute(envFile)) envFile = `${workingDir}/${envFile}`;
 const options = {
-  schemaFile: `${workingDir}/${argv.schema || '.env.schema'}`,
-  envFile: `${workingDir}/${argv.env || '.env'}`,
+  schemaFile,
+  envFile,
 };
 checkEnvFile(options).catch(console.error);
