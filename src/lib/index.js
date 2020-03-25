@@ -30,7 +30,7 @@ const defaultOptions = {
 /**
  * @function checkEnvFile
  *
- * @description Checks if the environmet file already exists and compare it with the schema file.
+ * @description Checks if the environment file already exists and compare it with the schema file.
  *              1. In case .env not exists, prompt questions to the user
  *                in order to fill the needed env variables and create the .env file
  *

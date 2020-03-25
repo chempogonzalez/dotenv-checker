@@ -10,6 +10,11 @@ This application is a simple checker/generator for environment files. It checks,
 In case you don't have .env file created or if it differs from schema file, it allows you to create the file through terminal prompt.
 
 ## 📐 Installation
+For global use
+```bash
+npm i --global dotenv-checker
+```
+For use in a project
 ```bash
 npm i --save-dev dotenv-checker
 ```
@@ -21,7 +26,17 @@ npm i --save-dev dotenv-checker
 #### 🔵 When environment file doesn't have some needed variable indicated in schema file
 ![Update file example](assets/update-file.svg)
 
-## 🚀 Usage
+## 🚀 CLI Usage
+
+Once installed, simply run the command from your terminal. Optional parameters are --env and --schema
+```bash
+dotenv-checker
+```
+```bash
+dotenv-checker --env .env.local --schema .env.example
+```
+
+## 🚀 Package Usage
 
 As the library process are executed asynchronously it returns a `Promise<void>` when the process is done.
 ```js
