@@ -1,19 +1,19 @@
 const {
-  getAttributesFromContent,
-  getDifference,
-} = require('./helpers');
-const {
   createEnvFile,
   updateEnvFile,
   fileExists,
   readFile,
-} = require('./file');
+} = require('./file')
+const {
+  getAttributesFromContent,
+  getDifference,
+} = require('./helpers')
 const {
   logError,
   logInfo,
   logWarn,
   logAlert,
-} = require('./logger');
+} = require('./logger')
 
 
 /**
@@ -24,7 +24,7 @@ const {
 const defaultOptions = {
   schemaFile: '.env.schema',
   envFile: '.env',
-};
+}
 
 
 /**
@@ -44,45 +44,42 @@ const defaultOptions = {
  * @returns Promise<void>
  */
 const checkEnvFile = async (options = undefined) => {
-  let funcOptions;
-  let schemaAttributes;
+  let schemaAttributes
 
   /**
    * Check if options are provided
    * if TRUE, merge with defaultOptions
    * if FALSE, set defaultOptions to the object
    */
-  if (!options) {
-    funcOptions = defaultOptions;
-  } else {
-    funcOptions = { ...defaultOptions, ...options };
-  }
+  const funcOptions = !options
+    ? defaultOptions
+    : { ...defaultOptions, ...options }
 
-  const { schemaFile, envFile } = funcOptions;
+  const { schemaFile, envFile } = funcOptions
 
   try {
     // Check if schema file exists
-    await fileExists(schemaFile);
+    await fileExists(schemaFile)
 
     /**
      * Read schema file and get env variable names to be used later in order to create the environment file
      */
-    const schemaContent = await readFile(schemaFile);
-    schemaAttributes = getAttributesFromContent(schemaContent);
-    logInfo(`✅ Schema file checked successfully`);
+    const schemaContent = await readFile(schemaFile)
+    schemaAttributes = getAttributesFromContent(schemaContent)
+    logInfo('✅ Schema file checked successfully')
   } catch (err) {
-    logError(`Trying to read 📄${schemaFile} file.`);
-    throw Error(`Error trying to read 📄${schemaFile} file.`);
+    logError(`Trying to read 📄${schemaFile} file.`)
+    throw Error(`Error trying to read 📄${schemaFile} file.`)
   }
 
   try {
     // Check if environment file exists
-    await fileExists(envFile);
+    await fileExists(envFile)
   } catch (err) {
     // If an error were found, execute 'Create Env file' when the file doesn't exist
-    logAlert(`${envFile} file doesn't exist`);
-    await createEnvFile(schemaAttributes, envFile);
-    return;
+    logAlert(`${envFile} file doesn't exist`)
+    await createEnvFile(schemaAttributes, envFile)
+    return
   }
 
   /**
@@ -90,9 +87,9 @@ const checkEnvFile = async (options = undefined) => {
    * it means that already exists an env file and we need to
    * start checking differences from schema file
    */
-  const envContent = await readFile(envFile);
-  const envAttributes = await getAttributesFromContent(envContent);
-  const difference = getDifference(schemaAttributes, envAttributes);
+  const envContent = await readFile(envFile)
+  const envAttributes = await getAttributesFromContent(envContent)
+  const difference = getDifference(schemaAttributes, envAttributes)
 
   /**
    * If there are some differences between schema and env file
@@ -101,13 +98,13 @@ const checkEnvFile = async (options = undefined) => {
    * If no differences were found, it's ALL OK. Process finished
    */
   if (difference && difference.length > 0) {
-    logWarn(`Environment file differs from ${schemaFile}`);
-    await updateEnvFile(difference, envContent, envFile);
+    logWarn(`Environment file differs from ${schemaFile}`)
+    await updateEnvFile(difference, envContent, envFile)
   } else {
-    logInfo(`✅ Environment file checked successfully`);
+    logInfo('✅ Environment file checked successfully')
   }
-};
+}
 
 module.exports = {
   checkEnvFile,
-};
+}

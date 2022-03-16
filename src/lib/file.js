@@ -1,12 +1,13 @@
-const fs = require('fs');
-const path = require('path');
-const appRoot = require('app-root-path');
-const { prompt } = require('inquirer');
-const { getEnvContent } = require('./helpers');
-const { logInfo } = require('./logger');
-const { getQuestions } = require('./questions');
+const appRoot = require('app-root-path')
+const fs = require('fs')
+const { prompt } = require('inquirer')
+const path = require('path')
 
-const { path: rootPath } = appRoot;
+const { getEnvContent } = require('./helpers')
+const { logInfo } = require('./logger')
+const { getQuestions } = require('./questions')
+
+const { path: rootPath } = appRoot
 
 
 /**
@@ -20,21 +21,21 @@ const { path: rootPath } = appRoot;
  * @returns Promise<void>
  */
 const writeFile = (FILE, text) => new Promise((resolve, reject) => {
-  const fullPath = `${path.isAbsolute(FILE) ? '' : `${rootPath}/`}/${FILE}`;
-  const folderPath = fullPath.substring(0, fullPath.lastIndexOf('/'));
+  const fullPath = `${path.isAbsolute(FILE) ? '' : `${rootPath}/`}/${FILE}`
+  const folderPath = fullPath.substring(0, fullPath.lastIndexOf('/'))
   try {
     fs.mkdir(folderPath, { recursive: true }, (err) => {
-      if (err) reject(err);
+      if (err) reject(err)
 
       fs.writeFile(fullPath, text, (error) => {
-        if (error) reject(error);
-        else resolve();
-      });
-    });
+        if (error) reject(error)
+        else resolve()
+      })
+    })
   } catch (err) {
-    reject(err);
+    reject(err)
   }
-});
+})
 
 
 /**
@@ -50,18 +51,18 @@ const writeFile = (FILE, text) => new Promise((resolve, reject) => {
  */
 const createEnvFile = async (attributes, envFile) => {
   // Get questions to be displayed through terminal
-  const questions = getQuestions(attributes);
+  const questions = getQuestions(attributes)
   // Start questions to fill env varialbes through user input
-  const answers = await prompt(questions);
+  const answers = await prompt(questions)
   // If user said NO to create the environment file, then the answers length is going to be 1
   if (Object.keys(answers).length > 1) {
     // Get the environment file content well formatted
-    const envContent = await getEnvContent(answers);
+    const envContent = await getEnvContent(answers)
     // Write the environment file with the filled content
-    await writeFile(envFile, envContent);
-    logInfo(`✅ Environment file has been created successfully`);
+    await writeFile(envFile, envContent)
+    logInfo('✅ Environment file has been created successfully')
   }
-};
+}
 
 
 /**
@@ -78,22 +79,22 @@ const createEnvFile = async (attributes, envFile) => {
  */
 const updateEnvFile = async (attributes, envContent, envFile) => {
   // Get questions to be displayed through terminal
-  const questions = getQuestions(attributes, true);
+  const questions = getQuestions(attributes, true)
   // Start questions to fill env varialbes through terminal
-  const answers = await prompt(questions);
+  const answers = await prompt(questions)
   // If user said NO to update the environment file, then the answers length is going to be 1
   if (Object.keys(answers).length > 1) {
     // Get the environment file content well formatted
-    const addedEnvContent = await getEnvContent(answers);
+    const addedEnvContent = await getEnvContent(answers)
     // Clean empty lines from existing environmet file
-    const cleanedCurrEnvContent = envContent.split('\n').filter((c) => !!c);
+    const cleanedCurrEnvContent = envContent.split('\n').filter((c) => !!c)
     // Concat cleaned existing environment file content with the new filled content
-    const newEnvContent = `${cleanedCurrEnvContent.join('\n')}\n${addedEnvContent}`;
+    const newEnvContent = `${cleanedCurrEnvContent.join('\n')}\n${addedEnvContent}`
     // Update the environment file with the current content and the new appended content
-    await writeFile(envFile, newEnvContent);
-    logInfo(`✅ Environment file has been updated successfully`);
+    await writeFile(envFile, newEnvContent)
+    logInfo('✅ Environment file has been updated successfully')
   }
-};
+}
 
 
 /**
@@ -106,12 +107,12 @@ const updateEnvFile = async (attributes, envContent, envFile) => {
  * @returns Promise<string>
  */
 const readFile = (FILE) => new Promise((resolve, reject) => {
-  const fullPath = `${path.isAbsolute(FILE) ? '' : `${rootPath}/`}/${FILE}`;
-  fs.readFile(fullPath, "utf8", (err, data) => {
-    if (err) reject(err);
-    else resolve(data);
-  });
-});
+  const fullPath = `${path.isAbsolute(FILE) ? '' : `${rootPath}/`}/${FILE}`
+  fs.readFile(fullPath, 'utf8', (err, data) => {
+    if (err) reject(err)
+    else resolve(data)
+  })
+})
 
 
 /**
@@ -124,14 +125,14 @@ const readFile = (FILE) => new Promise((resolve, reject) => {
  * @returns Promise<boolean>
  */
 const fileExists = (FILE) => new Promise((resolve, reject) => {
-  const fullPath = `${path.isAbsolute(FILE) ? '' : `${rootPath}/`}/${FILE}`;
+  const fullPath = `${path.isAbsolute(FILE) ? '' : `${rootPath}/`}/${FILE}`
   fs.access(fullPath, fs.F_OK, (err) => {
     if (err) {
-      reject(err);
+      reject(err)
     }
-    resolve(true);
-  });
-});
+    resolve(true)
+  })
+})
 
 module.exports = {
   fileExists,
@@ -139,4 +140,4 @@ module.exports = {
   updateEnvFile,
   createEnvFile,
   writeFile,
-};
+}

@@ -6,11 +6,12 @@
   "scripts": {
     "start": "node .",
     "start:watch": "nodemon",
-    "lint": "eslint src/**/*",
-    "lint:copy-paste": "jscpd ."
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint:copy-paste": "jscpd .",
+    "lint-fix": "npm run lint -- --fix"
   },
   "bin": {
-    "dotenv-checker": "./src/cli.js"
+    "dotenv-checker": "./src/bin/cli.js"
   },
   "repository": {
     "type": "git",
@@ -34,16 +35,14 @@
   },
   "homepage": "https://github.com/chempogonzalez/dotenv-checker#readme",
   "devDependencies": {
-    "eslint": "^6.8.0",
-    "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-plugin-import": "^2.20.1",
-    "jscpd": "^2.0.16",
-    "nodemon": "^2.0.2"
+    "@chempo/ec-linter": "^1.0.8",
+    "jscpd": "^3.4.5",
+    "nodemon": "^2.0.15"
   },
   "dependencies": {
     "app-root-path": "^3.0.0",
-    "inquirer": "^7.0.4",
-    "yargs": "^15.1.0"
+    "commander": "9.0.0",
+    "inquirer": "^8.2.1"
   },
   "jscpd": {
     "mode": "mild",

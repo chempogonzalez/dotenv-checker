@@ -12,14 +12,14 @@
  * @returns {Array<object>} Cleaned up array
  */
 const cleanNullValuesFromArray = (array) => {
-  const returnedArray = [...array];
+  const returnedArray = [...array]
   array.forEach((obj) => {
     if (!obj) {
-      returnedArray.splice(returnedArray.indexOf(undefined || ''), 1);
+      returnedArray.splice(returnedArray.indexOf(undefined || ''), 1)
     }
-  });
-  return returnedArray;
-};
+  })
+  return returnedArray
+}
 
 
 /**
@@ -33,23 +33,23 @@ const cleanNullValuesFromArray = (array) => {
  * @returns Array<string>
  */
 const arrayDiff = (schemaArray, envArray) => {
-  const a = [];
-  const diff = [];
-  const cleanedSchema = cleanNullValuesFromArray(schemaArray);
-  const cleanedEnv = cleanNullValuesFromArray(envArray);
+  const a = []
+  const diff = []
+  const cleanedSchema = cleanNullValuesFromArray(schemaArray)
+  const cleanedEnv = cleanNullValuesFromArray(envArray)
   for (let i = 0; i < cleanedSchema.length; i += 1) {
-    a[schemaArray[i]] = true;
+    a[schemaArray[i]] = true
   }
   for (let i = 0; i < cleanedEnv.length; i += 1) {
     if (a[envArray[i]]) {
-      delete a[envArray[i]];
+      delete a[envArray[i]]
     }
   }
   for (const k in a) {
-    diff.push(k);
+    diff.push(k)
   }
-  return diff;
-};
+  return diff
+}
 
 
 /**
@@ -63,11 +63,11 @@ const arrayDiff = (schemaArray, envArray) => {
  * @returns Array<string>
  */
 const getDifference = (schemaAttributes, envAttributes) => {
-  const cleanedSchema = cleanNullValuesFromArray(schemaAttributes);
-  const cleanedEnv = cleanNullValuesFromArray(envAttributes);
-  const difference = arrayDiff(cleanedSchema, cleanedEnv);
-  return difference;
-};
+  const cleanedSchema = cleanNullValuesFromArray(schemaAttributes)
+  const cleanedEnv = cleanNullValuesFromArray(envAttributes)
+  const difference = arrayDiff(cleanedSchema, cleanedEnv)
+  return difference
+}
 
 
 /**
@@ -80,18 +80,18 @@ const getDifference = (schemaAttributes, envAttributes) => {
  * @returns Array<string>
  */
 const getAttributesFromContent = (fileContent) => {
-  const lines = fileContent.split('\n');
+  const lines = fileContent.split('\n')
   return lines.reduce((prev, curr) => {
     if (curr) {
-      const attribute = curr.split('=')[0];
+      const attribute = curr.split('=')[0]
       return [
         ...prev,
         attribute,
-      ];
+      ]
     }
-    return [...prev];
-  }, []);
-};
+    return [...prev]
+  }, [])
+}
 
 
 /**
@@ -105,17 +105,17 @@ const getAttributesFromContent = (fileContent) => {
  * @returns string
  */
 const getEnvContent = (answers) => {
-  let content = '';
+  let content = ''
   for (const key in answers) {
     if (key.includes('-')) {
-      content = `${content}${answers[key]}\n`;
+      content = `${content}${answers[key]}\n`
     }
   }
-  return content;
-};
+  return content
+}
 
 module.exports = {
   getEnvContent,
   getAttributesFromContent,
   getDifference,
-};
+}

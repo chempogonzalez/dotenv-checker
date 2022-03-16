@@ -6,7 +6,7 @@ const defaultQuestion = {
   name: 'createFile',
   message: ' We have seen that the .env file needed is not created. \nDo you want to continue creating the file?',
   default: true,
-};
+}
 
 /**
  * First question for prompt when the env file doesn't match with the schema file
@@ -14,9 +14,9 @@ const defaultQuestion = {
 const updateQuestion = {
   type: 'confirm',
   name: 'createFile',
-  message: ` We have seen that the .env file differs from the schema file. \nDo you want to continue updating the file?`,
+  message: ' We have seen that the .env file differs from the schema file. \nDo you want to continue updating the file?',
   default: true,
-};
+}
 
 
 /**
@@ -37,18 +37,18 @@ const getQuestions = (attributes, updateEnv) => attributes.reduce((prev, curr, i
       message: `${curr}=`,
       default: '',
       when: (answers) => answers.createFile === true,
-      validate: (input) => ((input.length < 1) ? 'Value cannot be empty' : true),
-      filter: (input) => ((input.length < 1) ? '' : `${curr}=${input}`),
-      transformer: (input) => ((input.length < 1) ? '' : input.split('=')[1] || input),
-    };
+      // validate: (input) => ((input.length < 1) ? 'Value cannot be empty' : true),
+      filter: (input) => (`${curr}=${input}`),
+      transformer: (input) => (input.split('=')[1] ?? ''),
+    }
     return [
       ...prev,
       question,
-    ];
+    ]
   }
-  return [...prev];
-}, [updateEnv ? updateQuestion : defaultQuestion]);
+  return [...prev]
+}, [updateEnv ? updateQuestion : defaultQuestion])
 
 module.exports = {
   getQuestions,
-};
+}
