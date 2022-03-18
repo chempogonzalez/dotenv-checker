@@ -5,7 +5,7 @@ More info: [JSDoc](https://jsdoc.app/)
 
 ### SINGLE LINE COMMENTS
 ```js
-// Extract the array values.
+/** Extract the array values. */
 ```
 
 ### MULTI-LINE COMMENTS
@@ -20,13 +20,13 @@ More info: [JSDoc](https://jsdoc.app/)
 ### FUNCTIONS
 ```js
 /**
-* @function getIntentClass
-*
-* @description Return an intent class from its name.
-*
-* @param {string} intentName - The name located in the attribute 'name' in the loaded json in the variable intentsJson.
-*
-* @returns {Promise<any>}
-*
-*/
+  * @function getFileName
+  *
+  * @description Returns the simple file-name based on full path
+  *
+  * @param {string} filePath - the file path
+  *
+  * @returns {string}
+  *
+  */
 ```
