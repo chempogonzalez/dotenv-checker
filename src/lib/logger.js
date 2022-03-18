@@ -2,6 +2,7 @@
 const chalk = require('chalk')
 const gradient = require('gradient-string')
 
+
 /**
  * Short month names
  */
@@ -80,6 +81,7 @@ const log = (value) => {
 const logStartupBanner = () => console.log(`
 ${chalk.bold(gradient.summer('[ DOTENV-CHECKER ]'))} ${chalk.cyanBright('- Initializing checks for .env files consistency & sync...')}
 `)
+
 
 const logEnvFileCreated = (envFile) => () => {
   const envFileName = envFile.split('/').slice(-1)

@@ -4,9 +4,9 @@ const fs = require('fs')
 const { prompt } = require('inquirer')
 const path = require('path')
 
-const { getEnvContent, getParsedAttributes } = require('./helpers')
-const { logInfo, logEnvFileCreated } = require('./logger')
-const { getQuestions, getCreateNewEnvFileQuestions } = require('./questions')
+const { getParsedAttributes } = require('./helpers')
+const { logEnvFileCreated, logInfo } = require('./logger')
+const { getCreateNewEnvFileQuestions, getUpdateEnvFileQuestions } = require('./questions')
 
 const { path: rootPath } = appRoot
 
@@ -48,32 +48,6 @@ const writeFile = (file, text) => new Promise((resolve, reject) => {
 })
 
 
-/**
- * @function createEnvFile
- *
- * @description Creates the environment file with the fileName provided
- *              based on schema variable names filled through terminal
- *
- * @param {Array<string>} attributes Schema attributes which are going to be filled through user input
- * @param {string} envFile Environment file name
- *
- * @returns void
- */
-const createEnvFile = async (attributes, envFile) => {
-  // Get questions to be displayed through terminal
-  const questions = getQuestions(attributes)
-  // Start questions to fill env varialbes through user input
-  const answers = await prompt(questions)
-  // If user said NO to create the environment file, then the answers length is going to be 1
-  if (Object.keys(answers).length > 1) {
-    // Get the environment file content well formatted
-    const envContent = await getEnvContent(answers)
-    // Write the environment file with the filled content
-    await writeFile(envFile, envContent)
-    logInfo('✅ Environment file has been created successfully')
-  }
-}
-
 
 
 const createNewEnvFile = async (schemaContent, envFile, options) => {
@@ -87,7 +61,25 @@ const createNewEnvFile = async (schemaContent, envFile, options) => {
   if (createEnvFile) return writeFile(envFile, schemaContent).then(logEnvFileCreated(envFile))
 }
 
-const updateEnvFile = async (schemaContent, envContent, schemaFile, envFile) => {
+const updateEnvFile = async (options, schemaContent, envContent, schemaFile, envFile) => {
+  if (!options.skipUpdateQuestion) {
+    const questions = getUpdateEnvFileQuestions(envFile, schemaFile)
+    const { shouldUpdateEnvFile } = await prompt(questions)
+    if (shouldUpdateEnvFile) {
+      await processEnvFileToUpdate(schemaContent, envContent, schemaFile, envFile)
+      logInfo(`✅ Environment file (${chalk.underline(getShortFileName(envFile))}) updated successfully`)
+    }
+    return
+  }
+
+  /** If skipping asking for auto-update file */
+  await processEnvFileToUpdate(schemaContent, envContent, schemaFile, envFile)
+  logInfo(`✅ Environment file (${chalk.underline(getShortFileName(envFile))}) updated successfully`)
+}
+
+
+// TODO: To be refactorized and simplified
+const processEnvFileToUpdate = async (schemaContent, envContent, schemaFile, envFile) => {
   const schemaAttributes = getParsedAttributes(schemaContent)
   const envAttributes = getParsedAttributes(envContent)
   const keysNotInEnvFile = Object.keys(schemaAttributes).filter(k => !(k in envAttributes))
@@ -153,38 +145,6 @@ const updateEnvFile = async (schemaContent, envContent, schemaFile, envFile) => 
 
 
 /**
- * @function updateEnvironmentFile
- *
- * @description Creates the environment file with the fileName provided
- *              based on 'attributes' param filled by user input through terminal.
-
- * @param {Array<string>} attributes Variable names to be asked for
- * @param {string} envContent Current environment content where we are going to append the new needed variables
- * @param {string} envFile Environment file name
- *
- * @returns void
- */
-const updateEnvironmentFile = async (attributes, envContent, envFile) => {
-  // Get questions to be displayed through terminal
-  const questions = getQuestions(attributes, true)
-  // Start questions to fill env varialbes through terminal
-  const answers = await prompt(questions)
-  // If user said NO to update the environment file, then the answers length is going to be 1
-  if (Object.keys(answers).length > 1) {
-    // Get the environment file content well formatted
-    const addedEnvContent = await getEnvContent(answers)
-    // Clean empty lines from existing environmet file
-    const cleanedCurrEnvContent = envContent.split('\n').filter((c) => !!c)
-    // Concat cleaned existing environment file content with the new filled content
-    const newEnvContent = `${cleanedCurrEnvContent.join('\n')}\n${addedEnvContent}`
-    // Update the environment file with the current content and the new appended content
-    await writeFile(envFile, newEnvContent)
-    logInfo('✅ Environment file has been updated successfully')
-  }
-}
-
-
-/**
  * @function readFile
  *
  * @description Reads text asynchronously from the file and returns a Promise
@@ -228,8 +188,6 @@ module.exports = {
   fileExists,
   readFile,
   updateEnvFile,
-  updateEnvironmentFile,
-  createEnvFile,
   writeFile,
   createNewEnvFile,
   getShortFileName,

@@ -26,7 +26,8 @@
     "file",
     "generator",
     "checker",
-    "check"
+    "check",
+    "sync"
   ],
   "author": "chempogonzalez",
   "license": "ISC",

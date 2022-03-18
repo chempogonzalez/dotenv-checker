@@ -1,164 +1,82 @@
 # 🔌 dotENV-checker [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 
+<img src="https://img.shields.io/npm/v/dotenv-checker?style=for-the-badge" />
+
 > Environment file checker/generator 
 
 
 ## 🔖 Description
 
-This application is a simple checker/generator for environment files. It checks, based on a schema file, if your .env is up-to-date compared with schema variables. 
+This application is a **simple checker/generator for environment files**. It checks, based on a schema file, if your .env is up-to-date compared with schema variables. 
 
-In case you don't have .env file created or if it differs from schema file, it allows you to create the file through terminal prompt.
+In case you don't have .env file created or if it differs from schema file, it will keep your files synchronized.
 
-## 📐 Installation
-For global use
+## 📦 Installation
+
+```zsh
+# Install the cli in devDependencies
+$ npm i dotenv-checker -D
+```
+
+
+## 🚀 Usage
+
+Once installed, add to package.json scripts the following command:
+```json
+{
+  "scripts": {
+    // Script with "pre" in the name is executed before
+    // the script named "dev"
+    "predev": "dotenv-checker",
+    "dev": "next dev"
+  }
+}
+```
+## 🛠️ CLI Options
+You can customize the cli options. Here you have the possible customizations: 
+#### 🟣 `--schema or -s` _(default: ".env.schema")_
+Sets the custom file to be used as a schema/base file. This is the file which is used to sync the environment file
+```zsh
+# Set a custom schema (file to be based on)
+dotenv-checker --schema .env.base
+```
+<br>
+
+#### 🟣 `--env or -e` _(default: ".env.local")_
+Sets the custom file to be synchronized with the schema file. <br><br>In case this file is out-of-sync and has some keys that the schema doesn't have, it reports the named keys to you through terminal
 ```bash
-npm i --global dotenv-checker
+# File to check that needs to be in sync with schema file
+dotenv-checker --env .env.local
 ```
-For use in a project
-```bash
-npm i --save-dev dotenv-checker
-```
-## 💻 Examples
+<br>
 
-#### 🔴 When environment file doesn't exist
-![Create file example](assets/create-file.svg)
-
-#### 🔵 When environment file doesn't have some needed variable indicated in schema file
-![Update file example](assets/update-file.svg)
-
-## 🚀 CLI Usage
-
-Once installed, simply run the command from your terminal. Optional parameters are --env and --schema
-```bash
-dotenv-checker
-```
-```bash
-dotenv-checker --env .env.local --schema .env.example
-```
-
-## 🚀 Package Usage
-
-As the library process are executed asynchronously it returns a `Promise<void>` when the process is done.
-```js
-/**
- * Import the dotenv-checker library
- * (main method with object destructuring)
- **/
-import { checkEnvFile } from 'dotenv-checker';
-
-// Check environment variable with default config
-await checkEnvFile();
-```
-
-## ⚙️ Usage with custom options
-
-The library allows you to customize some options:
-- `schemaFile` (default `'.env.schema'`) -- Allows you to specify the schema file with a custom name or location _(paths must be specified from root directory)_
-- `envFile` (default `'.env'`) -- Allows you to specify the environment file to be created/checked with a custom name or location _(paths must be specified from root directory)_
-
-```js
-/**
- * Import the dotenv-checker library
- * (main method with object destructuring)
- **/
-import { checkEnvFile } from 'dotenv-checker';
-
-// Check environment variable with custom config
-await checkEnvFile({
-  schemaFile: '.env.example',
-  envFile: '.env.local',
-});
-```
-
-<br/>
-
--------------------------------------------------
-<br/>
-
-## 📌 Methodologies and Guidelines
-
-These are the methodologies and guides.
-
-- [GitHub flow](https://guides.github.com/introduction/flow/)
-
-Visual Studio Code Editor configurations and plugins.
-
-- [jsdoc](https://marketplace.visualstudio.com/items?itemName=stevencl.addDocComments)
-- [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
-
-Guideline JS and CSS.
-
-- [JSDoc](https://www.npmjs.com/package/eslint-plugin-jsdoc)
-
-## ⚡️ Technologies and Tools
-
-- [NodeJS](https://nodejs.org/)
-- [InquirerJS](https://github.com/SBoudrias/Inquirer.js/)
-
-
-## 👷 How to work with this project
-
-### ✅ Prerequisites
-
-In order to work with this project, your local environment must have at least the following versions:
-
-* NodeJS Version: 10.xx or higher
-* NPM Version: 6.12.0
-
-The following steps must be followed in order to work with this project locally.
-
-### 1️⃣ Install NodeJS Dependencies
-
-To work with this project locally, it is necessary to install the NPM dependencies.
+#### 🟣 `--skip-create-question or -scq` _(default: "true")_
+By default it auto create the environment file if it doesn't exist. If you set this to "false" you can force to be asked to create it or not in case it's needed
 
 ```bash
-# Install npm dependencies
-$npm i
+# File to check that needs to be in sync with schema file
+dotenv-checker --skip-create-question=false
 ```
 
+<br>
 
-### 2️⃣ Development
-
-To start working locally with the project you will need to execute the following command:
+#### 🟣 `--skip-update-question or -suq` _(default: "true")_
+By default it auto updates the environment file if it differs from schema file. If you set this to "false" you can force to be asked to update it or not in case it's needed
 
 ```bash
-# Development
-$npm run start:watch
+# File to check that needs to be in sync with schema file
+dotenv-checker --skip-create-question=false
 ```
 
-To run the linters for this project you will need to execute the following command:
+<br>
 
-```bash
-# ESLint linter
-$npm run lint
-
-# Duplicated code
-$npm run lint:copy-paste
-```
+------
+<br>
 
 
-## 📂 Code scaffolding
+## 🤓 Happy Code
 
-```any
-/
-├── doc
-|   ├── qac 🔰              # Quality Assurance Code.
-|   |   └── ...             # ...
-|   |
-├── src
-|   ├── lib
-|   |   ├── file            # Methods for file writting/reading
-|   |   ├── helpers         # Common methods to be used in the app
-|   |   ├── logger          # Custom pretty console logs
-|   |   ├── questions       # Prompt's questions code related
-|   |   └── ... index.js    # Main Lib logic method
-|   └── ... index.js        # Main Lib folder functionality export
-└── ...
-```
-
-## Happy Code
-
-Created with Typescript! ⚡ and latin music 🎺🎵
+> Created with Typescript! ⚡ and latin music 🎺🎵
 
 ### This README.md file has been written keeping in mind
 

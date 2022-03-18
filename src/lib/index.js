@@ -1,5 +1,5 @@
 const chalk = require('chalk')
-const { prompt } = require('inquirer')
+// const { prompt } = require('inquirer')
 
 const {
   updateEnvFile,
@@ -11,7 +11,8 @@ const {
 const {
   exitWithError,
   exitWithSuccess,
-  getParsedAttributes,
+  // getParsedAttributes,
+  areAttributesDifferent,
 } = require('./helpers')
 const {
   logError,
@@ -20,7 +21,7 @@ const {
   logAlert,
   logStartupBanner,
 } = require('./logger')
-const { getUpdateEnvFileQuestions } = require('./questions')
+// const { getUpdateEnvFileQuestions } = require('./questions')
 
 
 
@@ -31,7 +32,7 @@ const { getUpdateEnvFileQuestions } = require('./questions')
  * 1. schemaFile : name/path+name of the file which is going to be the reference file to create the .env file
  * 2. envFile: name/path+name of the file which is going to be created
  */
-const defaultOptions = {
+const DEFAULT_OPTIONS = {
   schemaFile: '.env.schema',
   envFile: '.env.local',
   options: {
@@ -45,86 +46,74 @@ const defaultOptions = {
  * @function checkEnvFile
  *
  * @description Checks if the environment file already exists and compare it with the schema file.
- *              1. In case .env not exists, prompt questions to the user
- *                in order to fill the needed env variables and create the .env file
+ *              1. In case .env not exists, prompt a create-file question to the user if it's set
  *
  *              2. In case .env already exists, checks differences between env variable names from schema and .env file.
- *                If there are some differences, ask the user to fill the needed variables to match schema variables.
+ *                If there are some differences, prompt for a update-file question if it's set. If not, auto update
  *
  * @param config Main function options with the following possible values:
  *                          1. **schemaFile** : name/path+name of the file which is going to be the reference file to create the .env file
  *                          2. **envFile**: name/path+name of the file which is going to be created
+ *                          3. **options**: skip questions options
  *
  * @returns Promise<void>
  */
-const checkEnvFile = async (config = defaultOptions) => {
+const checkEnvFile = async (config = DEFAULT_OPTIONS) => {
   let schemaContent
 
   logStartupBanner()
 
-  const mainConfig = { ...defaultOptions, ...(config || {}) }
+  const mainConfig = { ...DEFAULT_OPTIONS, ...(config || {}) }
 
   const { schemaFile, envFile, options } = mainConfig
 
 
   try {
-    // Check if schema file exists
+    /** Check if schema file exists */
     await fileExists(schemaFile)
 
-    /**
-     * Read schema file and get env variable names to be used later in order to create the environment file
-     */
     schemaContent = await readFile(schemaFile)
-    // schemaAttributes = getAttributesFromContent(schemaContent)
     logInfo(`✅ Schema file (${chalk.underline(getShortFileName(schemaFile))}) checked successfully`)
   } catch (err) {
     logError(`Trying to read 📄${schemaFile} file.`)
     exitWithError()
   }
 
+  /** ------------------------------------------------------------------------------------------------- */
 
   try {
-    // Check if environment file exists
+    /** Check if environment file exists */
     await fileExists(envFile)
   } catch (err) {
-    // If an error were found, execute 'Create Env file' when the file doesn't exist
+    /** Create the env file due to "file no exists" error */
     logAlert(`${envFile} file doesn't exist`)
-    // await createEnvFile(schemaAttributes, envFile)
     await createNewEnvFile(schemaContent, envFile, options)
     exitWithSuccess()
   }
 
+  /** ------------------------------------------------------------------------------------------------- */
 
 
 
+  /** CASE: UPDATE ENV FILE -------------------------------------------------- */
   /**
    * If no error were thrown executing 'fileExists',
    * it means that already exists an env file and we need to
    * start checking differences from schema file
    */
   const envContent = await readFile(envFile)
-  const schemaAttributes = Object.keys(getParsedAttributes(schemaContent) ?? {})
-  const envAttributes = Object.keys(getParsedAttributes(envContent) ?? {})
-
-  const isDifferentContent = JSON.stringify(schemaAttributes) !== JSON.stringify(envAttributes)
+  const isDifferentContent = areAttributesDifferent(schemaContent, envContent)
 
   if (isDifferentContent) {
     logWarn(` ⚠️  Environment file (${chalk.underline(getShortFileName(envFile))}) differs from ${chalk.underline(getShortFileName(schemaFile))}`)
-    if (!options.skipUpdateQuestion) {
-      const questions = getUpdateEnvFileQuestions(envFile, schemaFile)
-      const { shouldUpdateEnvFile } = await prompt(questions)
-      if (shouldUpdateEnvFile) {
-        await updateEnvFile(schemaContent, envContent, schemaFile, envFile)
-        logInfo(`✅ Environment file (${chalk.underline(getShortFileName(envFile))}) updated successfully`)
-      }
-      exitWithSuccess()
-    }
-
-    await updateEnvFile(schemaContent, envContent, schemaFile, envFile)
-    logInfo(`✅ Environment file (${chalk.underline(getShortFileName(envFile))}) updated successfully`)
+    await updateEnvFile(options, schemaContent, envContent, schemaFile, envFile)
     exitWithSuccess()
   }
 
+  /** ------------------------------------------------------------------------------------------------- */
+
+
+  /** CASE WHEN: all is fine and no need to update or create */
   logInfo(`✅ Environment file (${chalk.underline(getShortFileName(envFile))}) checked successfully`)
   exitWithSuccess()
 }
