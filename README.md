@@ -71,8 +71,14 @@ dotenv-checker --skip-create-question=false
 <br>
 
 ## 💻 Examples
-#### `Files are in sync and no problems found`
+#### Files are in sync and no problems were found
 <img src="https://github.com/chempogonzalez/dotenv-checker/blob/master/assets/all_ok.png">
+
+#### Schema has new keys and env file is not synchronized
+<img src="https://github.com/chempogonzalez/dotenv-checker/blob/master/assets/schema_has_new_keys.png">
+
+#### Environment file has keys that are not in schema
+<img src="https://github.com/chempogonzalez/dotenv-checker/blob/master/assets/env_has_keys_not_in_schema.png">
 
 ------
 <br>
