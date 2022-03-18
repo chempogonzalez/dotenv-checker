@@ -8,7 +8,8 @@
     "start:watch": "nodemon",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:copy-paste": "jscpd .",
-    "lint-fix": "npm run lint -- --fix"
+    "lint-fix": "npm run lint -- --fix",
+    "postinstall": "node ./src/scripts/add-script-to-package.js"
   },
   "bin": {
     "dotenv-checker": "./src/bin/cli.js"
@@ -37,6 +38,7 @@
   "homepage": "https://github.com/chempogonzalez/dotenv-checker#readme",
   "devDependencies": {
     "@chempo/ec-linter": "1.0.9",
+    "deepmerge": "^4.2.2",
     "jscpd": "^3.4.5",
     "nodemon": "^2.0.15"
   },
