@@ -22,11 +22,11 @@ $ npm i dotenv-checker -D
 ## 🚀 Usage
 Automatically, when you installs the package it will add a "predev" script. In case you need it, here you have an example to make it manually
 
-```json
+```jsonc
 {
   "scripts": {
     // Script with "pre" in the name is executed before
-    // the script named "dev"
+    // the script named "dev" automatically
     "predev": "dotenv-checker -s .env.schema -e .env.local",
     "dev": "next dev"
   }
@@ -69,6 +69,10 @@ dotenv-checker --skip-create-question=false
 ```
 
 <br>
+
+## 💻 Examples
+#### `Files are in sync and no problems found`
+<img src="https://github.com/chempogonzalez/dotenv-checker/blob/master/assets/all_ok.png">
 
 ------
 <br>
