@@ -78,7 +78,7 @@ dotenv-checker --skip-create-question=false
 <img src="https://github.com/chempogonzalez/dotenv-checker/blob/master/assets/schema_has_new_keys.png">
 
 #### Environment file has keys that are not in schema
-<img src="https://github.com/chempogonzalez/dotenv-checker/blob/master/assets/env_has_keys_not_in_schema.png">
+<img src="https://github.com/chempogonzalez/dotenv-checker/blob/master/assets/env_has_keys_are_not_in_schema.png">
 
 ------
 <br>
