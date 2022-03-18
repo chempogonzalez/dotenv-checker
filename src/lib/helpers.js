@@ -94,6 +94,22 @@ const getAttributesFromContent = (fileContent) => {
 }
 
 
+const getParsedAttributes = (fileContent) => {
+  const lines = fileContent.split('\n')
+  return lines.reduce((acc, curr) => {
+    const line = curr.trim()
+
+    // If it's not a comment line
+    if (!line.startsWith('#')) {
+      const [key, value] = line.split('=')
+      if (key) acc[key] = value ?? ''
+    }
+
+    return acc
+  }, {})
+}
+
+
 /**
  * @function getEnvContent
  *
@@ -114,8 +130,16 @@ const getEnvContent = (answers) => {
   return content
 }
 
+
+const exitWithError = () => process.exit(1)
+const exitWithSuccess = () => process.exit(0)
+
+
 module.exports = {
   getEnvContent,
   getAttributesFromContent,
+  getParsedAttributes,
   getDifference,
+  exitWithError,
+  exitWithSuccess,
 }

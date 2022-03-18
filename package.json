@@ -35,14 +35,16 @@
   },
   "homepage": "https://github.com/chempogonzalez/dotenv-checker#readme",
   "devDependencies": {
-    "@chempo/ec-linter": "^1.0.8",
+    "@chempo/ec-linter": "1.0.9",
     "jscpd": "^3.4.5",
     "nodemon": "^2.0.15"
   },
   "dependencies": {
     "app-root-path": "^3.0.0",
+    "chalk": "4.1.2",
     "commander": "9.0.0",
-    "inquirer": "^8.2.1"
+    "gradient-string": "2.0.0",
+    "inquirer": "8.2.1"
   },
   "jscpd": {
     "mode": "mild",

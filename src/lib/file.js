@@ -1,13 +1,22 @@
 const appRoot = require('app-root-path')
+const chalk = require('chalk')
 const fs = require('fs')
 const { prompt } = require('inquirer')
 const path = require('path')
 
-const { getEnvContent } = require('./helpers')
-const { logInfo } = require('./logger')
-const { getQuestions } = require('./questions')
+const { getEnvContent, getParsedAttributes } = require('./helpers')
+const { logInfo, logEnvFileCreated } = require('./logger')
+const { getQuestions, getCreateNewEnvFileQuestions } = require('./questions')
 
 const { path: rootPath } = appRoot
+
+
+
+const getFileFullPath = (file) => {
+  const filePath = path.isAbsolute(file) && !file.startsWith(rootPath) ? rootPath : ''
+  return path.join(filePath, file)
+}
+
 
 
 /**
@@ -15,13 +24,14 @@ const { path: rootPath } = appRoot
  *
  * @description Writes the given text into a file asynchronously returning a Promise
  *
- * @param {string} FILE file name to be saved (path + fileName)
+ * @param {string} file file name to be saved (path + fileName)
  * @param {string} text file content
  *
  * @returns Promise<void>
  */
-const writeFile = (FILE, text) => new Promise((resolve, reject) => {
-  const fullPath = `${path.isAbsolute(FILE) ? '' : `${rootPath}/`}/${FILE}`
+const writeFile = (file, text) => new Promise((resolve, reject) => {
+  const fullPath = getFileFullPath(file)
+  // const fullPath = `${path.isAbsolute(file) ? '' : `${rootPath}/`}/${FILE}`
   const folderPath = fullPath.substring(0, fullPath.lastIndexOf('/'))
   try {
     fs.mkdir(folderPath, { recursive: true }, (err) => {
@@ -65,8 +75,85 @@ const createEnvFile = async (attributes, envFile) => {
 }
 
 
+
+const createNewEnvFile = async (schemaContent, envFile, options) => {
+  if (options.skipCreateQuestion) {
+    return writeFile(envFile, schemaContent).then(logEnvFileCreated(envFile))
+  }
+
+  const questions = getCreateNewEnvFileQuestions(envFile)
+  const { createEnvFile } = await prompt(questions)
+
+  if (createEnvFile) return writeFile(envFile, schemaContent).then(logEnvFileCreated(envFile))
+}
+
+const updateEnvFile = async (schemaContent, envContent, schemaFile, envFile) => {
+  const schemaAttributes = getParsedAttributes(schemaContent)
+  const envAttributes = getParsedAttributes(envContent)
+  const keysNotInEnvFile = Object.keys(schemaAttributes).filter(k => !(k in envAttributes))
+
+  let finalContent = schemaContent
+
+  if (keysNotInEnvFile.length) {
+    const textByLength = keysNotInEnvFile.length === 1
+      ? 'Key which is going to be added:'
+      : 'Keys which are going to be added:'
+
+    console.log(`
+  ${chalk.underline(textByLength)}
+   - ${chalk.bold(keysNotInEnvFile.join('\n   - '))}
+    `)
+  }
+
+  const keysNotInSchemaFile = Object.keys(envAttributes).filter(k => !(k in schemaAttributes))
+
+  // If env file has other keys different than schema
+  if (keysNotInSchemaFile.length) {
+    const schemaFileName = schemaFile.split('/').slice(-1)[0]
+
+    let envFileDifferentKeysBlock = '# **************** !!WARN!! KEYS NOT AVAILABLE IN ' + schemaFileName + ' ****************\n'
+
+    const formattedKeysNotInSchemaFile = keysNotInSchemaFile.map(k => `${k}=${envAttributes[k]}`).join('\n  ')
+
+    envFileDifferentKeysBlock += '  ' + formattedKeysNotInSchemaFile + '\n'
+
+    envFileDifferentKeysBlock += '# ' + '*'.repeat(schemaFileName.length + 65) + '\n\n\n\n'
+    finalContent = envFileDifferentKeysBlock + finalContent
+
+
+    const textBylength = keysNotInSchemaFile.length === 1
+      ? `The following key is not present in the "${schemaFileName}" file:`
+      : `The following keys are not present in the "${schemaFileName}" file:`
+
+    console.log(`
+  ${chalk.bold.red('!! Alert !!')} ${chalk.underline(textBylength)}
+               - ${chalk.bold(keysNotInSchemaFile.join('\n               - '))}
+    `)
+  }
+
+  const finalContentByLines = finalContent.split('\n')
+
+  finalContent = finalContentByLines.map(l => {
+    const lineAttributeObj = getParsedAttributes(l)
+    const [key] = Object.keys(lineAttributeObj ?? {})
+
+    // Ensure currentline is a config line
+    if (key in envAttributes) {
+      const equalsSymbolIdx = l.indexOf('=')
+      const beforeEqualsContent = l.substring(0, equalsSymbolIdx >= 0 ? equalsSymbolIdx : undefined)
+      return beforeEqualsContent + '=' + envAttributes[key]
+    }
+    return l
+  }).join('\n')
+
+  return writeFile(envFile, finalContent)
+}
+
+
+
+
 /**
- * @function updateEnvFile
+ * @function updateEnvironmentFile
  *
  * @description Creates the environment file with the fileName provided
  *              based on 'attributes' param filled by user input through terminal.
@@ -77,7 +164,7 @@ const createEnvFile = async (attributes, envFile) => {
  *
  * @returns void
  */
-const updateEnvFile = async (attributes, envContent, envFile) => {
+const updateEnvironmentFile = async (attributes, envContent, envFile) => {
   // Get questions to be displayed through terminal
   const questions = getQuestions(attributes, true)
   // Start questions to fill env varialbes through terminal
@@ -102,12 +189,12 @@ const updateEnvFile = async (attributes, envContent, envFile) => {
  *
  * @description Reads text asynchronously from the file and returns a Promise
  *
- * @param {string} FILE file name (path + name)
+ * @param {string} file file name (path + name)
  *
  * @returns Promise<string>
  */
-const readFile = (FILE) => new Promise((resolve, reject) => {
-  const fullPath = `${path.isAbsolute(FILE) ? '' : `${rootPath}/`}/${FILE}`
+const readFile = (file) => new Promise((resolve, reject) => {
+  const fullPath = getFileFullPath(file)
   fs.readFile(fullPath, 'utf8', (err, data) => {
     if (err) reject(err)
     else resolve(data)
@@ -120,12 +207,12 @@ const readFile = (FILE) => new Promise((resolve, reject) => {
  *
  * @description Checks if the provided file exists
  *
- * @param {string} FILE file name (path + name)
+ * @param {string} file file name (path + name)
  *
  * @returns Promise<boolean>
  */
-const fileExists = (FILE) => new Promise((resolve, reject) => {
-  const fullPath = `${path.isAbsolute(FILE) ? '' : `${rootPath}/`}/${FILE}`
+const fileExists = (file) => new Promise((resolve, reject) => {
+  const fullPath = getFileFullPath(file)
   fs.access(fullPath, fs.F_OK, (err) => {
     if (err) {
       reject(err)
@@ -134,10 +221,16 @@ const fileExists = (FILE) => new Promise((resolve, reject) => {
   })
 })
 
+
+const getShortFileName = (filePath) => filePath.split('/').slice(-1)[0]
+
 module.exports = {
   fileExists,
   readFile,
   updateEnvFile,
+  updateEnvironmentFile,
   createEnvFile,
   writeFile,
+  createNewEnvFile,
+  getShortFileName,
 }

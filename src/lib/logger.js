@@ -1,4 +1,6 @@
 /* eslint-disable no-console */
+const chalk = require('chalk')
+const gradient = require('gradient-string')
 
 /**
  * Short month names
@@ -17,15 +19,6 @@ const monthNames = [
   'Nov',
   'Dec',
 ]
-
-/** */
-const colours = {
-  Reset: '\x1b[0m',
-  Bright: '\x1b[1m',
-  FgRed: '\x1b[31m',
-  FgGreen: '\x1b[32m',
-  FgYellow: '\x1b[33m',
-}
 
 
 /**
@@ -60,24 +53,37 @@ const formatDate = () => {
   return `📅 ${day}/${month}/${year} 🕐 ${hour}:${minutes}:${seconds}:${milliseconds} `
 }
 
+
+const withDate = (str, displayDate = false) => `${displayDate ? formatDate() : ''}${str}`
+
+
 const logError = (error) => {
-  console.error(`${formatDate()}${colours.Bright}${colours.FgRed}[❌ ERROR]${colours.Reset} %s`, error)
+  console.info(withDate(`${chalk.bold.red('[❌ ERROR]')}  ${chalk.red(error)}`))
 }
 
 const logInfo = (info) => {
-  console.info(`${formatDate()}${colours.Bright}${colours.FgGreen}[📗  INFO]${colours.Reset} %s`, info)
+  console.info(withDate(`${chalk.bold.green('📗 [ INFO ]')}  ${info}`))
 }
 
 const logWarn = (info) => {
-  console.warn(`${formatDate()}${colours.Bright}${colours.FgYellow}[🚧  WARN]${colours.Reset} %s`, info)
+  console.warn(withDate(`${chalk.bold.yellow('🚧 [ WARN ]')} ${info}`))
 }
 
 const logAlert = (info) => {
-  console.warn(`${formatDate()}${colours.Bright}${colours.FgRed}[❗️  ALERT]${colours.Reset} %s`, info)
+  console.warn(withDate(`${chalk.bold.red('❗️ [ ALERT ] 💢')} ${chalk.underline(info)}`))
 }
 
 const log = (value) => {
-  console.log(`${formatDate()}${colours.Bright}[📋 LOG]${colours.Reset} %s`, value)
+  console.warn(withDate(`${chalk.bold.whiteBright('[📋 LOG]')} ${value}`))
+}
+
+const logStartupBanner = () => console.log(`
+${chalk.bold(gradient.summer('[ DOTENV-CHECKER ]'))} ${chalk.cyanBright('- Initializing checks for .env files consistency & sync...')}
+`)
+
+const logEnvFileCreated = (envFile) => () => {
+  const envFileName = envFile.split('/').slice(-1)
+  logInfo(chalk.green(`✅ ${chalk.underline(envFileName)} file created successfully!`))
 }
 
 module.exports = {
@@ -86,4 +92,6 @@ module.exports = {
   logWarn,
   logAlert,
   log,
+  logStartupBanner,
+  logEnvFileCreated,
 }

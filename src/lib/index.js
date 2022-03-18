@@ -1,19 +1,29 @@
+const chalk = require('chalk')
+const { prompt } = require('inquirer')
+
 const {
-  createEnvFile,
   updateEnvFile,
   fileExists,
   readFile,
+  createNewEnvFile,
+  getShortFileName,
 } = require('./file')
 const {
-  getAttributesFromContent,
-  getDifference,
+  exitWithError,
+  exitWithSuccess,
+  getParsedAttributes,
 } = require('./helpers')
 const {
   logError,
   logInfo,
   logWarn,
   logAlert,
+  logStartupBanner,
 } = require('./logger')
+const { getUpdateEnvFileQuestions } = require('./questions')
+
+
+
 
 
 /**
@@ -23,7 +33,11 @@ const {
  */
 const defaultOptions = {
   schemaFile: '.env.schema',
-  envFile: '.env',
+  envFile: '.env.local',
+  options: {
+    skipCreateQuestion: true,
+    skipUpdateQuestion: true,
+  },
 }
 
 
@@ -37,25 +51,21 @@ const defaultOptions = {
  *              2. In case .env already exists, checks differences between env variable names from schema and .env file.
  *                If there are some differences, ask the user to fill the needed variables to match schema variables.
  *
- * @param {object} options Main function options with the following possible values:
+ * @param config Main function options with the following possible values:
  *                          1. **schemaFile** : name/path+name of the file which is going to be the reference file to create the .env file
  *                          2. **envFile**: name/path+name of the file which is going to be created
  *
  * @returns Promise<void>
  */
-const checkEnvFile = async (options = undefined) => {
-  let schemaAttributes
+const checkEnvFile = async (config = defaultOptions) => {
+  let schemaContent
 
-  /**
-   * Check if options are provided
-   * if TRUE, merge with defaultOptions
-   * if FALSE, set defaultOptions to the object
-   */
-  const funcOptions = !options
-    ? defaultOptions
-    : { ...defaultOptions, ...options }
+  logStartupBanner()
 
-  const { schemaFile, envFile } = funcOptions
+  const mainConfig = { ...defaultOptions, ...(config || {}) }
+
+  const { schemaFile, envFile, options } = mainConfig
+
 
   try {
     // Check if schema file exists
@@ -64,13 +74,14 @@ const checkEnvFile = async (options = undefined) => {
     /**
      * Read schema file and get env variable names to be used later in order to create the environment file
      */
-    const schemaContent = await readFile(schemaFile)
-    schemaAttributes = getAttributesFromContent(schemaContent)
-    logInfo('✅ Schema file checked successfully')
+    schemaContent = await readFile(schemaFile)
+    // schemaAttributes = getAttributesFromContent(schemaContent)
+    logInfo(`✅ Schema file (${chalk.underline(getShortFileName(schemaFile))}) checked successfully`)
   } catch (err) {
     logError(`Trying to read 📄${schemaFile} file.`)
-    throw Error(`Error trying to read 📄${schemaFile} file.`)
+    exitWithError()
   }
+
 
   try {
     // Check if environment file exists
@@ -78,9 +89,13 @@ const checkEnvFile = async (options = undefined) => {
   } catch (err) {
     // If an error were found, execute 'Create Env file' when the file doesn't exist
     logAlert(`${envFile} file doesn't exist`)
-    await createEnvFile(schemaAttributes, envFile)
-    return
+    // await createEnvFile(schemaAttributes, envFile)
+    await createNewEnvFile(schemaContent, envFile, options)
+    exitWithSuccess()
   }
+
+
+
 
   /**
    * If no error were thrown executing 'fileExists',
@@ -88,21 +103,30 @@ const checkEnvFile = async (options = undefined) => {
    * start checking differences from schema file
    */
   const envContent = await readFile(envFile)
-  const envAttributes = await getAttributesFromContent(envContent)
-  const difference = getDifference(schemaAttributes, envAttributes)
+  const schemaAttributes = Object.keys(getParsedAttributes(schemaContent) ?? {})
+  const envAttributes = Object.keys(getParsedAttributes(envContent) ?? {})
 
-  /**
-   * If there are some differences between schema and env file
-   * We need to start the 'updateEnvFile' process
-   *
-   * If no differences were found, it's ALL OK. Process finished
-   */
-  if (difference && difference.length > 0) {
-    logWarn(`Environment file differs from ${schemaFile}`)
-    await updateEnvFile(difference, envContent, envFile)
-  } else {
-    logInfo('✅ Environment file checked successfully')
+  const isDifferentContent = JSON.stringify(schemaAttributes) !== JSON.stringify(envAttributes)
+
+  if (isDifferentContent) {
+    logWarn(` ⚠️  Environment file (${chalk.underline(getShortFileName(envFile))}) differs from ${chalk.underline(getShortFileName(schemaFile))}`)
+    if (!options.skipUpdateQuestion) {
+      const questions = getUpdateEnvFileQuestions(envFile, schemaFile)
+      const { shouldUpdateEnvFile } = await prompt(questions)
+      if (shouldUpdateEnvFile) {
+        await updateEnvFile(schemaContent, envContent, schemaFile, envFile)
+        logInfo(`✅ Environment file (${chalk.underline(getShortFileName(envFile))}) updated successfully`)
+      }
+      exitWithSuccess()
+    }
+
+    await updateEnvFile(schemaContent, envContent, schemaFile, envFile)
+    logInfo(`✅ Environment file (${chalk.underline(getShortFileName(envFile))}) updated successfully`)
+    exitWithSuccess()
   }
+
+  logInfo(`✅ Environment file (${chalk.underline(getShortFileName(envFile))}) checked successfully`)
+  exitWithSuccess()
 }
 
 module.exports = {
