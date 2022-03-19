@@ -7,9 +7,7 @@
 
 ## 🔖 Description
 
-This application is a **simple checker/generator for environment files**. It checks, based on a schema file, if your .env is up-to-date compared with schema variables. 
-
-In case you don't have .env file created or if it differs from schema file, it will keep your files synchronized.
+This application is a **checker/generator for environment files**. It checks, based on a schema/base file, if your .env is up-to-date and it maintains them synchronized.
 
 ## 📦 Installation
 

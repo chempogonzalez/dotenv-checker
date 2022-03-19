@@ -64,13 +64,6 @@ program
   .parse(process.argv)
 
 
-
-// Display help if no args are provided
-if (process.argv.length < 3) {
-  program.help()
-}
-
-
 const { INIT_CWD } = process.env
 const cwd = INIT_CWD || process.cwd()
 const workingDir = cwd

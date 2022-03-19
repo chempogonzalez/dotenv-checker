@@ -1,0 +1,160 @@
+{
+  //* =========== React ===========
+  "React.useState": {
+    "prefix": "us",
+    "description": "React use state with initialValue",
+    "body": [
+      "const [$1, set${1/(^[a-zA-Z])(.*)/${1:/upcase}${2}/}] = useState<$3>($2)$0"
+    ]
+  },
+  "React.useEffect": {
+    "prefix": "uf",
+    "body": [
+      "useEffect(() => {",
+      "  $0",
+      "}, [$1])"
+    ]
+  },
+  "React.useRef": {
+    "prefix": "uref",
+    "body": ["const ${1:someRef} = useRef($0)"]
+  },
+  "React Component": {
+    "prefix": "rc",
+    "body": [
+      "export function ${1:${TM_FILENAME_BASE/(^[a-zA-Z])(.*)/${1:/upcase}${2}/}} (): JSX.Element {",
+      "  return (",
+      "    <div>",
+      "      $0",
+      "    </div>",
+      "  )",
+      "}",
+      ""
+    ]
+  },
+  "React Component with Props": {
+    "prefix": "rcp",
+    "body": [
+      "interface ${1:${TM_FILENAME_BASE/(^[a-zA-Z])(.*)/${1:/upcase}${2}/}}Props {$0",
+      "  ${2/,\\s+/\r\n  /gi}",
+      "}\n",
+      "export function $1 ({ $2 }: $1Props): JSX.Element {",
+      "  return (",
+      "    <div>",
+      "    </div>",
+      "  )",
+      "}",
+      ""
+    ]
+  },
+  //* [end] ======== React ===========
+
+
+
+
+
+
+  //* =========== Commons ===========
+  "Simple Line Region": {
+    "prefix": "sreg",
+    "scope": "javascript, typescript, javascriptreact, typescriptreact, css, scss",
+    "body": [
+      "/* [start] ------------------ $1 ---------------------------------- */",
+      "${TM_SELECTED_TEXT}$0",
+      "/* [end] -------------------- $1 ---------------------------------- */",
+      "",
+    ]
+  },
+
+  "Complex Line Region": {
+    "prefix": "creg",
+    "scope": "javascript, typescript, javascriptreact, typescriptreact, css, scss",
+    "body": [
+      "/* [start] ================== $1 ================================== */",
+      "${TM_SELECTED_TEXT}$0",
+      "/* [end] ==================== $1 ================================== */",
+    ]
+  },
+  "Render Region Highlight": {
+    "prefix": "rreg",
+    "scope": "javascript, typescript, javascriptreact, typescriptreact",
+    "body": [
+      "//* ================================ RENDER ================================== */",
+      "${TM_SELECTED_TEXT}$0",
+      "//* ========================================================================== */",
+    ]
+  },
+  //* [end] ======== Commons ===========
+
+
+
+
+  //* =========== Nextjs ===============
+  "Next Page": {
+    "prefix": "np",
+    "body": [
+      "export default function ${1:${TM_FILENAME_BASE/(^[a-zA-Z])(.*)/${1:/upcase}${2}/}}Page (): JSX.Element {",
+      "  return (",
+      "    <div>",
+      "      $0",
+      "    </div>",
+      "  )",
+      "}",
+      ""
+    ]
+  },
+  "Get Static Props": {
+    "prefix": "gsp",
+    "body": [
+      "export const getStaticProps = async (context: GetStaticPropsContext) => {",
+      "  $0",
+      "  return {",
+      "    props: {},",
+      "  }",
+      "}",
+      ""
+    ]
+  },
+  "Get Static Paths": {
+    "prefix": "gspaths",
+    "body": [
+      "export const getStaticPaths: GetStaticPaths = async () => {",
+      "  return {",
+      "    paths: [",
+      "      { params: { $1 }}",
+      "    ],",
+      "    fallback: $2,",
+      "  }",
+      "}",
+      ""
+    ]
+  },
+  "Get Server Side Props": {
+    "prefix": "gssp",
+    "body": [
+      "export const getServerSideProps = async (context: GetServerSidePropsContext) => {",
+      "  return {",
+      "    props: { $1 },",
+      "  }",
+      "}",
+      ""
+    ]
+  },
+  "Infer Get Static Props": {
+    "prefix": "igsp",
+    "body": "InferGetStaticPropsType<typeof getStaticProps>"
+  },
+  "Infer Get Server Side Props": {
+    "prefix": "igssp",
+    "body": "InferGetServerSidePropsType<typeof getServerSideProps>"
+  },
+  //* [end] ======== Nextjs ===========
+
+
+
+
+  "Wrap with Fragment": {
+    "prefix": "frag",
+    "body": ["<>", "\t${TM_SELECTED_TEXT}", "</>"]
+  },
+}

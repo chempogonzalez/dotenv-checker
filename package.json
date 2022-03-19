@@ -1,7 +1,7 @@
 {
   "name": "dotenv-checker",
   "version": "1.1.4",
-  "description": "🔌 Generates through prompts the .env variables file based on a schema/defaults file",
+  "description": "🔌 CLI to check/generate .env files and maintain them synchronized",
   "main": "./src/index.js",
   "scripts": {
     "start": "node .",
@@ -21,12 +21,12 @@
   "keywords": [
     "dotenv",
     "config",
+    "environment",
+    "checker",
+    "generator",
     "conf",
     "env",
-    "environment",
     "file",
-    "generator",
-    "checker",
     "check",
     "sync"
   ],
@@ -45,7 +45,7 @@
     "deepmerge": "^4.2.2",
     "app-root-path": "^3.0.0",
     "chalk": "4.1.2",
-    "commander": "9.0.0",
+    "commander": "9.1.0",
     "gradient-string": "2.0.0",
     "inquirer": "8.2.1"
   },

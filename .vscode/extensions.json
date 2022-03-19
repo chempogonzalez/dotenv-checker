@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "usernamehw.errorlens",
+    "pkief.material-icon-theme",
+    "formulahendry.auto-rename-tag",
+    "editorconfig.editorconfig",
+    "aaron-bond.better-comments"
+  ]
+}
