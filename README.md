@@ -63,7 +63,7 @@ By default it auto updates the environment file if it differs from schema file. 
 
 ```bash
 # File to check that needs to be in sync with schema file
-dotenv-checker --skip-create-question=false
+dotenv-checker --skip-update-question=false
 ```
 
 <br>
