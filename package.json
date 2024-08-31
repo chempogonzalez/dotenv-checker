@@ -1,6 +1,6 @@
 {
   "name": "dotenv-checker",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "🔌 CLI to check/generate .env files and maintain them synchronized",
   "main": "./src/index.js",
   "scripts": {
@@ -8,8 +8,7 @@
     "start:watch": "nodemon",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:copy-paste": "jscpd .",
-    "lint-fix": "npm run lint -- --fix",
-    "postinstall": "node ./src/scripts/add-script-to-package.js"
+    "lint-fix": "npm run lint -- --fix"
   },
   "bin": {
     "dotenv-checker": "./src/bin/cli.js"
