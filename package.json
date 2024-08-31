@@ -1,6 +1,6 @@
 {
   "name": "dotenv-checker",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "description": "🔌 CLI to check/generate .env files and maintain them synchronized",
   "main": "./src/index.js",
   "scripts": {
