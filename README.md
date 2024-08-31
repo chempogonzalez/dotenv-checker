@@ -17,15 +17,12 @@ $ npm i dotenv-checker -D
 
 ## 🚀 Usage
 
-Automatically, when you installs the package it will add a "predev" script. In case you need it, here you have an example to make it manually
-
 ```jsonc
 {
   "scripts": {
-    // Script with "pre" in the name is executed before
-    // the script named "dev" automatically
-    "predev": "dotenv-checker -s .env.schema -e .env.local",
-    "dev": "next dev"
+    "check-env": "dotenv-checker -s .env.schema -e .env.local",
+    // Execute the check-env before starting your application
+    "dev": "npm run check-env && next dev"
   }
 }
 ```
