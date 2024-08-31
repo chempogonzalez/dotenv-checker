@@ -37,8 +37,8 @@
   "homepage": "https://github.com/chempogonzalez/dotenv-checker#readme",
   "devDependencies": {
     "@chempo/ec-linter": "1.0.9",
-    "jscpd": "^3.4.5",
-    "nodemon": "^2.0.15"
+    "jscpd": "3.4.5",
+    "nodemon": "2.0.15"
   },
   "dependencies": {
     "deepmerge": "^4.2.2",
